@@ -2,7 +2,7 @@
 
 set -e
 
-echo "Setting up API development environment..."
+echo "Setting up API development environment using config/environment_api.yml ..."
 
 if ! command -v conda &> /dev/null; then
     echo "Conda is not installed. Please install Conda and try again."

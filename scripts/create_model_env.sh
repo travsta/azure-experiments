@@ -2,7 +2,7 @@
 
 set -e
 
-echo "Setting up model development environment..."
+echo "Setting up model development environment using config/environment_model.yml ..."
 
 if ! command -v conda &> /dev/null; then
     echo "Conda is not installed. Please install Conda and try again."
