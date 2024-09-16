@@ -14,7 +14,13 @@ class DummyTopicClassifier:
         
         Returns:
             Dict[str, float]: A dictionary of topic probabilities.
+        
+        Raises:
+            TypeError: If the input is not a string.
         """
+        if not isinstance(text, str):
+            raise TypeError("Input must be a string")
+        
         # Generate random probabilities
         probabilities: np.ndarray = np.random.dirichlet(np.ones(len(self.topics)), size=1)[0]
         return dict(zip(self.topics, probabilities))
