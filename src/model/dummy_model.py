@@ -1,9 +1,9 @@
 import numpy as np
-from typing import Dict
+from typing import Dict, List
 
 class DummyTopicClassifier:
-    def __init__(self):
-        self.topics = ['soccer', 'fashion', 'food', 'technology', 'travel']
+    def __init__(self) -> None:
+        self.topics: List[str] = ['soccer', 'fashion', 'food', 'technology', 'travel']
 
     def predict(self, text: str) -> Dict[str, float]:
         """
@@ -16,7 +16,7 @@ class DummyTopicClassifier:
             Dict[str, float]: A dictionary of topic probabilities.
         """
         # Generate random probabilities
-        probabilities = np.random.dirichlet(np.ones(len(self.topics)), size=1)[0]
+        probabilities: np.ndarray = np.random.dirichlet(np.ones(len(self.topics)), size=1)[0]
         return dict(zip(self.topics, probabilities))
 
     def get_topics(self) -> List[str]:
@@ -29,9 +29,9 @@ class DummyTopicClassifier:
         return self.topics
 
 if __name__ == "__main__":
-    classifier = DummyTopicClassifier()
-    sample_text = "This is a sample Instagram post."
-    result = classifier.predict(sample_text)
+    classifier: DummyTopicClassifier = DummyTopicClassifier()
+    sample_text: str = "This is a sample Instagram post."
+    result: Dict[str, float] = classifier.predict(sample_text)
     print(f"Sample text: {sample_text}")
     print("Predicted topic probabilities:")
     for topic, prob in result.items():
