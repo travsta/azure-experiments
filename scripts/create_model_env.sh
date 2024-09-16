@@ -2,7 +2,10 @@
 
 set -e
 
-echo "Setting up model development environment using config/environment_model.yml ..."
+# Get the directory where the script is located
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+echo "Setting up model development environment using ../config/environment_model.yml ..."
 
 if ! command -v conda &> /dev/null; then
     echo "Conda is not installed. Please install Conda and try again."
@@ -28,9 +31,9 @@ echo "Creating Conda environment for model development..."
 read -p "Is this for Azure deployment? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    AZURE_DEPLOY=1 conda env create -f environment_model.yml
+    AZURE_DEPLOY=1 conda env create -f "$SCRIPT_DIR/../config/environment_model.yml"
 else
-    conda env create -f environment_model.yml
+    conda env create -f "$SCRIPT_DIR/../config/environment_model.yml"
 fi
 
 source "$(conda info --base)/etc/profile.d/conda.sh"
