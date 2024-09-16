@@ -44,11 +44,40 @@ class PostClassifier:
                 "status_code": 500
             }
 
-class AzureFunctionHandler:
-    @staticmethod
-    @func.FunctionApp()
-    @func.route(route="classify_post")
+# Check if we're using the newer programming model
+if hasattr(func, 'FunctionApp'):
+    app = func.FunctionApp()
+
+    @app.function_name(name="ClassifyPost")
+    @app.route(route="classify_post", auth_level=func.AuthLevel.FUNCTION)
     def classify_post_function(req: func.HttpRequest) -> func.HttpResponse:
+        logging.info('Python HTTP trigger function processed a request.')
+
+        try:
+            req_body = req.get_json()
+        except ValueError:
+            return func.HttpResponse(
+                "Invalid JSON in request body",
+                status_code=400
+            )
+
+        post_text = req_body.get('text')
+        if not post_text:
+            return func.HttpResponse(
+                "Please pass a 'text' property in the request body",
+                status_code=400
+            )
+
+        result = PostClassifier.classify_post(post_text)
+        
+        return func.HttpResponse(
+            body=result["body"],
+            status_code=result["status_code"],
+            mimetype="application/json"
+        )
+else:
+    # Older programming model
+    def main(req: func.HttpRequest) -> func.HttpResponse:
         logging.info('Python HTTP trigger function processed a request.')
 
         try:
