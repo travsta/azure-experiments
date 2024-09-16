@@ -6,13 +6,13 @@ on:
     paths:
       - 'src/model/**'
       - 'tests/model/**'
-      - 'config/environment_model.yml'
+      - 'config/environment_model_*.yml'
   pull_request:
     branches: [ main ]
     paths:
       - 'src/model/**'
       - 'tests/model/**'
-      - 'config/environment_model.yml'
+      - 'config/environment_model_*.yml'
 
 jobs:
   test:
@@ -26,7 +26,7 @@ jobs:
     - name: Install dependencies
       run: |
         pip install conda
-        conda env create -f config/environment_model.yml
+        conda env create -f config/environment_model_local.yml
         conda run -n instagram-topic-classifier-model pip install pytest-cov
     - name: Run tests with coverage
       run: |

@@ -8,7 +8,7 @@ The project is divided into two main components:
 1. Topic Classification Model
 2. API Service
 
-Each component has its own Conda environment and deployment process.
+Each component has separate Conda environments for local development and Azure deployment.
 
 ### Directory Structure
 ```
@@ -35,8 +35,10 @@ instagram-topic-classifier/
 ├── config/
 │   ├── endpoint.yml               # Azure ML endpoint configuration
 │   ├── deployment.yml             # Azure ML deployment configuration
-│   ├── environment_model.yml      # Conda environment specification for the model
-│   ├── environment_api.yml        # Conda environment specification for the API
+│   ├── environment_api_local.yml  # Conda environment specification for local API development
+│   ├── environment_api_azure.yml  # Conda environment specification for API deployment on Azure
+│   ├── environment_model_local.yml # Conda environment specification for local model development
+│   ├── environment_model_azure.yml # Conda environment specification for model deployment on Azure
 │   └── pytest.ini                 # Pytest configuration file
 ├── .gitignore
 ├── LICENSE

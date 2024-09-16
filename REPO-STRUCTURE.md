@@ -29,16 +29,18 @@ instagram-topic-classifier/
 ├── config/
 │   ├── endpoint.yml               # Azure ML endpoint configuration
 │   ├── deployment.yml             # Azure ML deployment configuration
-│   ├── environment_model.yml      # Conda environment specification for the model
-│   ├── environment_api.yml        # Conda environment specification for the API
+│   ├── environment_api_local.yml  # Conda environment specification for local API development
+│   ├── environment_api_azure.yml  # Conda environment specification for API deployment on Azure
+│   ├── environment_model_local.yml # Conda environment specification for local model development
+│   ├── environment_model_azure.yml # Conda environment specification for model deployment on Azure
 │   └── pytest.ini                 # Pytest configuration file
 │
 ├── docs/
 │   └── architecture.md            # Detailed architecture description
 │
 ├── scripts/
-│   ├── create_model_env.sh        # Script to create model development environment
 │   ├── create_api_env.sh          # Script to create API development environment
+│   ├── create_model_env.sh        # Script to create model development environment
 │   └── run_tests_with_coverage.sh # Script to run tests with coverage
 │
 ├── .gitignore                     # Specifies intentionally untracked files to ignore
@@ -82,8 +84,10 @@ Contains tests for the API components.
 Contains configuration files for the project.
 - `endpoint.yml`: Defines the Azure ML endpoint configuration.
 - `deployment.yml`: Specifies the deployment settings for the model in Azure ML.
-- `environment_model.yml`: Defines the Conda environment for the model component.
-- `environment_api.yml`: Defines the Conda environment for the API component.
+- `environment_api_local.yml`: Defines the Conda environment for local API development.
+- `environment_api_azure.yml`: Defines the Conda environment for API deployment on Azure.
+- `environment_model_local.yml`: Defines the Conda environment for local model development.
+- `environment_model_azure.yml`: Defines the Conda environment for model deployment on Azure.
 - `pytest.ini`: Configuration file for pytest, including coverage settings.
 
 ### `docs/`
@@ -92,8 +96,8 @@ Contains additional documentation for the project.
 
 ### `scripts/`
 Contains utility scripts for environment setup and testing.
-- `create_model_env.sh`: Script to set up the local development environment for the model.
-- `create_api_env.sh`: Script to set up the local development environment for the API.
+- `create_api_env.sh`: Script to set up the development environment for the API, choosing between local and Azure configurations.
+- `create_model_env.sh`: Script to set up the development environment for the model, choosing between local and Azure configurations.
 - `run_tests_with_coverage.sh`: Script to run tests with coverage for either model or API.
 
 ### Root Directory Files
