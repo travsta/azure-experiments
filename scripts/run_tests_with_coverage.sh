@@ -18,7 +18,7 @@ conda activate instagram-topic-classifier-$ENV
 pip install pytest-cov
 
 # Run pytest with coverage
-pytest --cov=src/$ENV --cov-report=term-missing --cov-report=html tests/$ENV
+pytest --cov=src/$ENV --cov-report=term-missing --cov-report=html tests/test_*.py
 
 # Deactivate the conda environment
 conda deactivate

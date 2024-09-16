@@ -19,12 +19,9 @@ instagram-topic-classifier/
 │       └── function_app.py        # Azure Function implementation
 │
 ├── tests/
-│   ├── model/
-│   │   ├── test_dummy_model.py    # Unit tests for dummy_model.py
-│   │   └── test_score.py          # Unit tests for score.py
-│   │
-│   └── api/
-│       └── test_function_app.py   # Unit tests for function_app.py
+│   ├── test_dummy_model.py    # Unit tests for dummy_model.py
+│   ├── test_score.py          # Unit tests for score.py
+│   └── test_function_app.py   # Unit tests for function_app.py
 │
 ├── config/
 │   ├── endpoint.yml               # Azure ML endpoint configuration
@@ -70,14 +67,8 @@ Contains files related to the API implementation.
 
 ### `tests/`
 Contains all unit tests for the project, mirroring the structure of the `src/` directory.
-
-#### `tests/model/`
-Contains tests for the model components.
 - `test_dummy_model.py`: Tests for the DummyTopicClassifier.
 - `test_score.py`: Tests for the Azure ML scoring script.
-
-#### `tests/api/`
-Contains tests for the API components.
 - `test_function_app.py`: Tests for the Azure Function implementation.
 
 ### `config/`
