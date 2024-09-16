@@ -1,0 +1,86 @@
+name: Model CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'src/model/**'
+      - 'tests/model/**'
+      - 'config/environment_model.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'src/model/**'
+      - 'tests/model/**'
+      - 'config/environment_model.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.11'
+    - name: Install dependencies
+      run: |
+        pip install conda
+        conda env create -f config/environment_model.yml
+        conda run -n instagram-topic-classifier-model pip install pytest-cov
+    - name: Run tests with coverage
+      run: |
+        conda run -n instagram-topic-classifier-model pytest --cov=src/model --cov-report=xml --cov-report=term --cov-fail-under=80 tests/model
+    - name: Store coverage report
+      uses: actions/upload-artifact@v2
+      with:
+        name: coverage-report-model
+        path: coverage.xml
+    - name: Comment PR
+      uses: actions/github-script@v6
+      if: github.event_name == 'pull_request'
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          const fs = require('fs');
+          const coverage = fs.readFileSync('coverage.xml', 'utf8');
+          const percentage = coverage.match(/line-rate="([\d.]+)"/)[1];
+          const coveragePercentage = (parseFloat(percentage) * 100).toFixed(2);
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `📊 Model Coverage: ${coveragePercentage}%`
+          })
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.11'
+    - name: Install Azure CLI
+      run: |
+        curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+    - name: Login to Azure
+      run: |
+        az login --service-principal -u ${{ secrets.AZURE_SP_CLIENT_ID }} -p ${{ secrets.AZURE_SP_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+    - name: Install Azure ML CLI
+      run: |
+        az extension add -n ml -y
+    - name: Set Azure ML Workspace
+      run: |
+        az configure --defaults group=${{ secrets.AZURE_RESOURCE_GROUP }} workspace=${{ secrets.AZURE_ML_WORKSPACE }}
+    - name: Register model
+      run: |
+        az ml model create --name dummy-topic-classifier --path ./src/model/dummy_model.py --type custom_model
+    - name: Create online endpoint
+      run: |
+        az ml online-endpoint create -f ./config/endpoint.yml
+    - name: Deploy model
+      run: |
+        az ml online-deployment create -f ./config/deployment.yml --all-traffic

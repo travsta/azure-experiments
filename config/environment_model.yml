@@ -1,0 +1,25 @@
+name: instagram-topic-classifier-model
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - numpy=1.24.3
+  - scikit-learn=1.2.2
+
+variables:
+  AZURE_DEPLOY: "0"
+
+# Local development dependencies (only included when AZURE_DEPLOY is not 1)
+{% if environ.get('AZURE_DEPLOY', '0') != '1' %}
+  - pytest=7.3.1
+  - pytest-mock=3.10.0
+{% endif %}
+
+# Azure ML dependencies (only included when AZURE_DEPLOY is set to 1)
+{% if environ.get('AZURE_DEPLOY', '0') == '1' %}
+  - pip:
+    - azureml-core==1.50.0
+    - azureml-defaults==1.50.0
+{% endif %}
