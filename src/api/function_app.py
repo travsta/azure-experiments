@@ -25,9 +25,9 @@ def classify_post(req: func.HttpRequest) -> func.HttpResponse:
         )
 
     try:
-        # In a real scenario, this would be the endpoint of your deployed model
-        model_url = "YOUR_MODEL_ENDPOINT_URL"
-        model_key = "YOUR_MODEL_KEY"
+        # this should be the endpoint of the deployed model
+        model_url = "MODEL_ENDPOINT_URL"
+        model_key = "MODEL_KEY"
         headers = {
             'Content-Type': 'application/json',
             'Authorization': f'Bearer {model_key}'

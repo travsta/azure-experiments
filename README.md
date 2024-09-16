@@ -146,7 +146,7 @@ Remember, while high coverage is important, it's equally important to have meani
 
 Our CI pipeline automatically runs tests and checks coverage for all pull requests. You can see the results in the GitHub Actions tab of the repository.
 
-[![CI/CD Pipeline](https://github.com/<your-username>/<your-repo-name>/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/<your-username>/<your-repo-name>/actions/workflows/ci-cd.yml)
+TODO
 
 The pipeline will post a comment on your pull request with the current coverage percentages for both the model and API components.
 
@@ -163,6 +163,6 @@ The pipeline will post a comment on your pull request with the current coverage 
 Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Contact
-Your Name - [@yourtwitter](https://twitter.com/yourtwitter) - email@example.com
+Travis - email@example.com
 
-Project Link: [https://github.com/<your-username>/instagram-topic-classification](https://github.com/<your-username>/instagram-topic-classification)
+Project Link: [https://github.com/travsta/instagram-topic-classification](https://github.com/travsta/instagram-topic-classification)

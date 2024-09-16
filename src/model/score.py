@@ -13,7 +13,7 @@ def run(raw_data):
         # Make prediction
         result = model.predict(data)
         
-        # You can add any additional processing here
+        # add any additional processing here
         
         # Return the result as JSON
         return json.dumps({"result": result})
