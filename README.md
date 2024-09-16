@@ -48,7 +48,7 @@ instagram-topic-classifier/
 ### Prerequisites
 - Python 3.11+
 - Conda
-- Node.js and npm (for Azure Functions Core Tools)
+- Azure Functions Core Tools
 - Azure subscription (for deployment)
 
 ### Setting up the Model Environment
