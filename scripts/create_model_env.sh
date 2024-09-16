@@ -18,7 +18,7 @@ if conda info --envs | grep -q $ENV_NAME; then
     read -p "Environment '$ENV_NAME' already exists. Do you want to recreate it? (y/[N]): " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        conda env remove -n $ENV_NAME
+        conda env remove -n $ENV_NAME --yes
     else
         read -p "Do you want to update the existing environment? ([Y]/n): " -n 1 -r
         echo
