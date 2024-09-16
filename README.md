@@ -18,7 +18,7 @@ instagram-topic-classifier/
 │   │   ├── dummy_model.py         # Implementation of the DummyTopicClassifier
 │   │   └── score.py               # Script for Azure ML model deployment
 │   └── api/
-│       └── function_app.py        # Azure Function implementation
+│       └── function_app.py        # Azure Function API implementation
 ├── tests/
 │   ├── model/                     # Model tests
 │   └── api/                       # API tests
