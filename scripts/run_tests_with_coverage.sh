@@ -14,6 +14,9 @@ ENV=$1
 source "$(conda info --base)/etc/profile.d/conda.sh"
 conda activate instagram-topic-classifier-$ENV
 
+# Ensure pytest-cov is installed
+pip install pytest-cov
+
 # Run pytest with coverage
 pytest --cov=src/$ENV --cov-report=term-missing --cov-report=html tests/$ENV
 
