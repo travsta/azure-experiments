@@ -15,18 +15,25 @@ fi
 ENV_NAME="instagram-topic-classifier-model"
 
 if conda info --envs | grep -q $ENV_NAME; then
-    read -p "Environment '$ENV_NAME' already exists. Recreate? (y/n) " -n 1 -r
+    read -p "Environment '$ENV_NAME' already exists. Do you want to recreate it? (y/[N]): " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         conda env remove -n $ENV_NAME
     else
-        echo "Exiting without changes."
-        exit 0
+        read -p "Do you want to update the existing environment? ([Y]/n): " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+            REPLY="y"
+        fi
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            echo "Exiting without changes."
+            exit 0
+        fi
     fi
 fi
 
 # Check if this is for Azure deployment
-read -p "Is this for Azure deployment? (y/n) " -n 1 -r
+read -p "Is this for Azure deployment? (y/[N]): " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     ENV_FILE="$SCRIPT_DIR/../config/environment_model_azure.yml"
@@ -34,9 +41,13 @@ else
     ENV_FILE="$SCRIPT_DIR/../config/environment_model_local.yml"
 fi
 
-echo "Creating Conda environment for model development using $ENV_FILE..."
+echo "Creating/Updating Conda environment for model development using $ENV_FILE..."
 
-conda env create -f "$ENV_FILE"
+if conda info --envs | grep -q $ENV_NAME; then
+    conda env update -f "$ENV_FILE" -n $ENV_NAME
+else
+    conda env create -f "$ENV_FILE"
+fi
 
 source "$(conda info --base)/etc/profile.d/conda.sh"
 conda activate $ENV_NAME
