@@ -120,4 +120,5 @@ def test_non_string_text(scorer):
     result = scorer.run(test_input)
     result_dict = json.loads(result)
     
-    assert "result" in result_dict  # The model should still process this as it's valid JSON
+    assert "error" in result_dict
+    assert "Input must be a string" in result_dict["error"]

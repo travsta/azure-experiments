@@ -1,5 +1,6 @@
 import json
 import pytest
+import requests
 from unittest.mock import patch
 from src.api.function_app import PostClassifier
 
@@ -27,12 +28,12 @@ def test_classify_post_empty_text():
 
 def test_classify_post_model_error(mock_requests_post):
     """Test classify_post function when model endpoint returns an error."""
-    mock_requests_post.side_effect = Exception("Model endpoint error")
+    mock_requests_post.side_effect = requests.exceptions.RequestException("Model endpoint error")
 
     response = PostClassifier.classify_post("Test post")
     
     assert response["status_code"] == 500
-    assert "Error processing request" in response["body"]
+    assert "Error processing request: Model endpoint error" in response["body"]
 
 # Additional tests...
 

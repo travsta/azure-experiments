@@ -1,7 +1,7 @@
-import azure.functions as func
 import logging
 import json
 import requests
+import azure.functions as func
 
 class PostClassifier:
     @staticmethod
@@ -15,6 +15,12 @@ class PostClassifier:
         Returns:
             dict: A dictionary containing the response data and status code.
         """
+        if not isinstance(post_text, str):
+            return {
+                "body": "Input must be a string",
+                "status_code": 400
+            }
+
         if not post_text:
             return {
                 "body": "Please provide a non-empty text for classification",
@@ -40,10 +46,11 @@ class PostClassifier:
             }
         except requests.exceptions.RequestException as e:
             return {
-                "body": "Error processing request",
+                "body": f"Error processing request: {str(e)}",
                 "status_code": 500
             }
 
+# ... rest of the file remains the same ...
 # Check if we're using the newer programming model
 if hasattr(func, 'FunctionApp'):
     app = func.FunctionApp()
