@@ -14,26 +14,30 @@ Each component has its own Conda environment and deployment process.
 ```
 instagram-topic-classifier/
 ├── src/
-│   ├── model/              # Model-related code
-│   │   ├── dummy_model.py  # Implementation of the DummyTopicClassifier
-│   │   └── score.py        # Script for Azure ML model deployment
+│   ├── model/                     # Model-related code
+│   │   ├── dummy_model.py         # Implementation of the DummyTopicClassifier
+│   │   └── score.py               # Script for Azure ML model deployment
 │   └── api/
-│       └── function_app.py # Azure Function implementation
+│       └── function_app.py        # Azure Function implementation
 ├── tests/
-│   ├── model/              # Model tests
-│   └── api/                # API tests
+│   ├── model/                     # Model tests
+│   └── api/                       # API tests
 ├── scripts/
 │   ├── create_model_env.sh
 │   ├── create_api_env.sh
 │   └── run_tests_with_coverage.sh
 ├── docs/
-│   └── architecture.md     # Detailed architecture description
+│   └── architecture.md            # Detailed architecture description
 ├── .github/
 │   └── workflows/
-│       └── ci-cd.yml       # CI/CD pipeline configuration
-├── environment_model.yml   # Conda environment for the model
-├── environment_api.yml     # Conda environment for the API
-├── pytest.ini              # Pytest configuration
+│       ├── model-ci-cd.yml        # CI/CD pipeline for the model
+│       └── api-ci-cd.yml          # CI/CD pipeline for the API
+├── config/
+│   ├── endpoint.yml               # Azure ML endpoint configuration
+│   ├── deployment.yml             # Azure ML deployment configuration
+│   ├── environment_model.yml      # Conda environment specification for the model
+│   ├── environment_api.yml        # Conda environment specification for the API
+│   └── pytest.ini                 # Pytest configuration file
 ├── .gitignore
 ├── LICENSE
 └── README.md               # This file
