@@ -145,6 +145,15 @@ After running the tests with coverage:
 
 Remember, while high coverage is important, it's equally important to have meaningful tests that verify the correct behavior of code.
 
+## Linting
+
+This project uses pylint and flake8 for code linting. To run the linters:
+
+1. For the model: `./scripts/run_linters.sh model`
+2. For the API: `./scripts/run_linters.sh api`
+
+Linting is also performed as part of the CI/CD pipeline for both the model and API components.
+
 ## Deployment
 
 ### Deploying the Model to Azure ML
