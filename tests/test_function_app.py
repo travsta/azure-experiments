@@ -106,3 +106,22 @@ def test_classify_post_model_http_error(mock_requests_post):
     
     assert response["status_code"] == 500
     assert "Error processing request" in response["body"]
+
+@patch.dict(os.environ, {"MODEL_ENDPOINT_URL": "https://test-url.com", "MODEL_KEY": "test-key"})
+def test_classify_post_uses_env_variables(mock_requests_post):
+    """
+    Test if the classify_post function uses the correct environment variables.
+    """
+    mock_requests_post.return_value.status_code = 200
+    mock_requests_post.return_value.text = '{"result": {"topic1": 0.5, "topic2": 0.5}}'
+
+    PostClassifier.classify_post("Test post")
+    
+    mock_requests_post.assert_called_once_with(
+        "https://test-url.com",
+        data='{"text": "Test post"}',
+        headers={
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer test-key'
+        }
+    ), "classify_post is not using the correct environment variables for the model endpoint URL and key."
