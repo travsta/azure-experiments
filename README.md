@@ -145,14 +145,41 @@ After running the tests with coverage:
 
 Remember, while high coverage is important, it's equally important to have meaningful tests that verify the correct behavior of code.
 
-## Linting
+## Linting and Code Quality
 
-This project uses pylint and flake8 for code linting. To run the linters:
+This project recommends use of pylint, flake8, and pre-commit hooks for code quality assurance.
+
+### Running Linters Manually
+
+To run the linters manually:
 
 1. For the model: `./scripts/run_linters.sh model`
 2. For the API: `./scripts/run_linters.sh api`
 
 Linting is also performed as part of the CI/CD pipeline for both the model and API components.
+
+### Pre-commit Hooks
+
+We recommend the use of pre-commit hooks to ensure code quality checks are run before each commit. To set up pre-commit hooks:
+
+1. Ensure you're in the correct conda environment:
+   ```
+   conda activate instagram-topic-classifier-api  # or instagram-topic-classifier-model
+   ```
+
+2. Install the pre-commit hooks:
+   ```
+   pre-commit install
+   ```
+
+3. (Optional) Run pre-commit on all files:
+   ```
+   pre-commit run --all-files
+   ```
+
+Now, the pre-commit hooks will run automatically before each commit, checking your changes with flake8, pylint, and other configured hooks.
+
+Note: If a hook fails, the commit will be aborted. Fix the issues and try committing again. You can also use `git commit -n` to bypass the hooks, but this is not recommended unless absolutely necessary.
 
 ## Deployment
 
@@ -184,18 +211,34 @@ TODO
 The pipeline will post a comment on your pull request with the current coverage percentages for both the model and API components.
 
 ## Contributing
+
 1. Fork the repository
 2. Create a new branch (`git checkout -b feature/AmazingFeature`)
-3. Make your changes
-4. Run tests to ensure everything is working
-5. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-6. Push to the branch (`git push origin feature/AmazingFeature`)
-7. Open a Pull Request
+3. Set up the development environment:
+   - Install dependencies: `conda env create -f config/environment_api_local.yml`  # or environment_model_local.yml
+   - Activate the environment: `conda activate instagram-topic-classifier-api`  # or instagram-topic-classifier-model
+   - Set up pre-commit hooks: `pre-commit install`
+4. Make your changes
+5. Run tests to ensure everything is working: `pytest tests/`
+   - For the model:
+      ```
+      ./scripts/run_tests_with_coverage.sh model
+      ```
+   - For the api:
+      ```
+      ./scripts/run_tests_with_coverage.sh api
+      ```
+6. Run linters: `./scripts/run_linters.sh api`  # or model
+7. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+8. Push to the branch (`git push origin feature/AmazingFeature`)
+9. Open a Pull Request
+
+Note: The pre-commit hooks will run automatically when you attempt to commit. If any hooks fail, fix the issues and try committing again.
 
 ## License
 Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Contact
-Travis - email@example.com
+Travis - @example.com
 
 Project Link: [https://github.com/travsta/instagram-topic-classification](https://github.com/travsta/instagram-topic-classification)

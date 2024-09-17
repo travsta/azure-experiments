@@ -1,16 +1,49 @@
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.4.0
+    rev: v4.4.0
     hooks:
     -   id: trailing-whitespace
+        files: \.(py|md|yml|yaml|json)$
     -   id: end-of-file-fixer
+        files: \.(py|md|yml|yaml|json)$
     -   id: check-yaml
     -   id: check-added-large-files
+    -   id: check-ast
+        files: \.py$
+    -   id: check-json
+    -   id: check-merge-conflict
+    -   id: detect-private-key
+
 -   repo: https://github.com/PyCQA/flake8
     rev: 6.0.0
     hooks:
     -   id: flake8
+        files: \.py$
+
 -   repo: https://github.com/PyCQA/pylint
     rev: v2.17.4
     hooks:
     -   id: pylint
+        files: \.py$
+        args: [--rcfile=.pylintrc]
+
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.3.0
+    hooks:
+    -   id: mypy
+        files: \.py$
+        args: [--ignore-missing-imports]
+
+-   repo: https://github.com/asottile/pyupgrade
+    rev: v3.4.0
+    hooks:
+    -   id: pyupgrade
+        files: \.py$
+        args: [--py311-plus]
+
+-   repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+    -   id: isort
+        files: \.py$
+        args: [--profile, black]
