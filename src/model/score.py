@@ -52,10 +52,6 @@ def init():
 def run(raw_data):
     return scorer.run(raw_data)
 
-# This is for local testing
+# a note about local testing
 if __name__ == "__main__":
-    scorer = Scorer()
-    scorer.init()
-    test_data: str = json.dumps({"text": "This is a test Instagram post about food and travel."})
-    result: str = scorer.run(test_data)
-    print(result)
+    print("To test this locally, use pytest to execute local unit tests. To test the model, try running the dummy_model.py script.")
