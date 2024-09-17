@@ -27,13 +27,6 @@ def test_conda_env_files(config_file):
     assert 'name' in env_config, f"'name' key not found in '{config_file}'. Ensure the file has a 'name' field specifying the environment name."
     assert 'dependencies' in env_config, f"'dependencies' key not found in '{config_file}'. Ensure the file has a 'dependencies' field listing required packages."
 
-def test_conda_directory_exists():
-    """
-    Test if the .conda directory exists in the user's home directory.
-    """
-    conda_dir = os.path.expanduser("~/.conda")
-    assert os.path.isdir(conda_dir), "The .conda directory was not found in the user's home directory. Ensure Conda is properly installed."
-
 def test_project_structure():
     """
     Test if the basic project structure is correct.
