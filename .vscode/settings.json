@@ -5,7 +5,7 @@
         "--cov=src/model",
         "--cov-report=term-missing",
         "--cov-report=html",
-        "tests/test_*.py"
+        "tests/"
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true
