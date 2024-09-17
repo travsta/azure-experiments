@@ -1,0 +1,12 @@
+{
+    "python.testing.pytestArgs": [
+        "-v",
+        "--cov=src/api",
+        "--cov=src/model",
+        "--cov-report=term-missing",
+        "--cov-report=html",
+        "tests/test_*.py"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
+}
