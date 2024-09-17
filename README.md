@@ -1,7 +1,18 @@
-# Instagram Topic Classification - Azure Experiments
+# Instagram Topic Classification
 
 ## Project Overview
 This project implements a microservice for classifying Instagram posts by topic using Azure Functions and Azure Machine Learning. It provides a RESTful API endpoint that accepts the text of an Instagram post and returns probabilities for various topics.
+
+## Table of Contents
+1. [Project Structure](#project-structure)
+2. [Setup Instructions](#setup-instructions)
+3. [Development Workflow](#development-workflow)
+4. [Testing](#testing)
+5. [Deployment](#deployment)
+6. [Configuration Management](#configuration-management)
+7. [CI/CD](#cicd)
+8. [Contributing](#contributing)
+9. [License](#license)
 
 ## Project Structure
 The project is divided into two main components:
@@ -132,7 +143,7 @@ After running the tests with coverage:
 1. Terminal Report: This is displayed immediately after the tests run.
 2. HTML Report: Open `htmlcov/index.html` in a web browser for a detailed, interactive coverage report.
 
-Remember, while high coverage is important, it's equally important to have meaningful tests that verify the correct behavior of your code.
+Remember, while high coverage is important, it's equally important to have meaningful tests that verify the correct behavior of code.
 
 ## Deployment
 
@@ -142,7 +153,20 @@ Remember, while high coverage is important, it's equally important to have meani
 ### Deploying the API to Azure Functions
 (Add specific instructions for deploying the API to Azure Functions)
 
+## Configuration Management
+This project uses environment variables for configuration. To set up:
+
+1. Copy `.env.example` to `.env`
+2. Fill in the values in `.env` with your actual configuration
+
+For local development, also create a `local.settings.json` file in your function app directory.
+
+Note: Never commit your `.env` or `local.settings.json` files to version control.
+
 ## Continuous Integration
+This project uses GitHub Actions for CI/CD. The pipelines are defined in `.github/workflows/`:
+- `api-ci-cd.yml`: CI/CD for the API
+- `model-ci-cd.yml`: CI/CD for the model
 
 Our CI pipeline automatically runs tests and checks coverage for all pull requests. You can see the results in the GitHub Actions tab of the repository.
 
