@@ -3,6 +3,16 @@ import json
 import requests
 import azure.functions as func
 
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Now you can access the environment variables
+env_model_url = os.getenv('MODEL_ENDPOINT_URL')
+env_model_key = os.getenv('MODEL_KEY')
+
 class PostClassifier:
     @staticmethod
     def classify_post(post_text):
@@ -29,8 +39,8 @@ class PostClassifier:
 
         try:
             # this should be the endpoint of the deployed model
-            model_url = "MODEL_ENDPOINT_URL"
-            model_key = "MODEL_KEY"
+            model_url = env_model_url
+            model_key = env_model_key
             headers = {
                 'Content-Type': 'application/json',
                 'Authorization': f'Bearer {model_key}'
