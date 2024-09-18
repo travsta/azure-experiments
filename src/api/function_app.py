@@ -60,65 +60,35 @@ class PostClassifier:
                 "status_code": 500
             }
 
-# ... rest of the file remains the same ...
-# Check if we're using the newer programming model
-if hasattr(func, 'FunctionApp'):
-    app = func.FunctionApp()
+app = func.FunctionApp()
 
-    @app.function_name(name="ClassifyPost")
-    @app.route(route="classify_post", auth_level=func.AuthLevel.FUNCTION)
-    def classify_post_function(req: func.HttpRequest) -> func.HttpResponse:
-        logging.info('Python HTTP trigger function processed a request.')
+@app.function_name(name="ClassifyPost")
+@app.route(route="classify_post", auth_level=func.AuthLevel.FUNCTION)
+def classify_post_function(req: func.HttpRequest) -> func.HttpResponse:
+    logging.info('Python HTTP trigger function processed a request.')
 
-        try:
-            req_body = req.get_json()
-        except ValueError:
-            return func.HttpResponse(
-                "Invalid JSON in request body",
-                status_code=400
-            )
-
-        post_text = req_body.get('text')
-        if not post_text:
-            return func.HttpResponse(
-                "Please pass a 'text' property in the request body",
-                status_code=400
-            )
-
-        result = PostClassifier.classify_post(post_text)
-        
+    try:
+        req_body = req.get_json()
+    except ValueError:
         return func.HttpResponse(
-            body=result["body"],
-            status_code=result["status_code"],
-            mimetype="application/json"
+            "Invalid JSON in request body",
+            status_code=400
         )
-else:
-    # Older programming model
-    def main(req: func.HttpRequest) -> func.HttpResponse:
-        logging.info('Python HTTP trigger function processed a request.')
 
-        try:
-            req_body = req.get_json()
-        except ValueError:
-            return func.HttpResponse(
-                "Invalid JSON in request body",
-                status_code=400
-            )
-
-        post_text = req_body.get('text')
-        if not post_text:
-            return func.HttpResponse(
-                "Please pass a 'text' property in the request body",
-                status_code=400
-            )
-
-        result = PostClassifier.classify_post(post_text)
-        
+    post_text = req_body.get('text')
+    if not post_text:
         return func.HttpResponse(
-            body=result["body"],
-            status_code=result["status_code"],
-            mimetype="application/json"
+            "Please pass a 'text' property in the request body",
+            status_code=400
         )
+
+    result = PostClassifier.classify_post(post_text)
+    
+    return func.HttpResponse(
+        body=result["body"],
+        status_code=result["status_code"],
+        mimetype="application/json"
+    )
 
 if __name__ == "__main__":
     # This is for local testing
