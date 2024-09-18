@@ -1,4 +1,7 @@
 import pytest
+import os
+import sys
+import subprocess
 from src.model.dummy_model import DummyTopicClassifier
 
 def test_dummy_classifier_initialization():
@@ -85,3 +88,32 @@ def test_probability_sum():
     for text in texts:
         result = classifier.predict(text)
         assert pytest.approx(sum(result.values()), 1e-6) == 1.0
+
+def test_dummy_model_script_execution():
+    """
+    Test the execution of dummy_model.py as a script.
+    This covers lines 38-44 in dummy_model.py.
+    """
+    # Get the path to the dummy_model.py file
+    script_path = os.path.join(os.path.dirname(__file__), '..', 'src', 'model', 'dummy_model.py')
+    
+    # Run the script as a subprocess
+    result = subprocess.run([sys.executable, script_path], capture_output=True, text=True)
+    
+    # Check if the script ran successfully
+    assert result.returncode == 0, f"Script failed with error: {result.stderr}"
+    
+    # Check if the output contains expected strings
+    assert "Sample text:" in result.stdout, "Output doesn't contain 'Sample text:'"
+    assert "Predicted topic probabilities:" in result.stdout, "Output doesn't contain 'Predicted topic probabilities:'"
+    
+    # Check if all topics are present in the output
+    expected_topics = ['soccer', 'fashion', 'food', 'technology', 'travel']
+    for topic in expected_topics:
+        assert topic in result.stdout, f"Output doesn't contain the topic '{topic}'"
+    
+    # Check if probabilities are present and formatted correctly
+    for line in result.stdout.split('\n'):
+        if ':' in line and line.split(':')[0].strip() in expected_topics:
+            probability = float(line.split(':')[1].strip())
+            assert 0 <= probability <= 1, f"Invalid probability value: {probability}"

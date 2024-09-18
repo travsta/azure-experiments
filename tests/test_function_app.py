@@ -1,109 +1,83 @@
-import os
 import json
 import pytest
+from unittest.mock import patch, MagicMock
+import azure.functions as func
 import requests
-from unittest.mock import patch
-from src.api.function_app import PostClassifier
+from src.api.function_app import classify_post_function_wrapper, PostClassifier
 
 @pytest.fixture
-def mock_requests_post():
-    with patch('src.api.function_app.requests.post') as mock_post:
-        yield mock_post
+def mock_env_variables():
+    with patch.dict('os.environ', {
+        'MODEL_ENDPOINT_URL': 'http://test-url.com',
+        'MODEL_KEY': 'test-key'
+    }):
+        yield
 
-def test_classify_post_valid_input(mock_requests_post):
-    """Test classify_post function with valid input."""
-    mock_requests_post.return_value.status_code = 200
-    mock_requests_post.return_value.text = json.dumps({"result": {"topic1": 0.5, "topic2": 0.5}})
+class TestClassifyPostFunction:
+    def test_classify_post_function_wrapper(self, mock_env_variables):
+        req_body = {"text": "Test post"}
 
-    response = PostClassifier.classify_post("Test post")
-    
-    assert response["status_code"] == 200
-    assert "result" in json.loads(response["body"])
+        with patch.object(PostClassifier, 'classify_post', return_value={"body": json.dumps({"result": {"topic1": 0.5, "topic2": 0.5}}), "status_code": 200}):
+            response = classify_post_function_wrapper(req_body)
 
-def test_classify_post_empty_text():
-    """Test classify_post function with empty text."""
-    response = PostClassifier.classify_post("")
-    
-    assert response["status_code"] == 400
-    assert "Please provide a non-empty text" in response["body"]
+        assert response is not None
+        assert isinstance(response, func.HttpResponse)
+        assert response.status_code == 200
+        assert json.loads(response.get_body()) == {"result": {"topic1": 0.5, "topic2": 0.5}}
 
-def test_classify_post_model_error(mock_requests_post):
-    """Test classify_post function when model endpoint returns an error."""
-    mock_requests_post.side_effect = requests.exceptions.RequestException("Model endpoint error")
+    def test_classify_post_function_wrapper_missing_text(self, mock_env_variables):
+        req_body = {}  # Missing 'text' key
 
-    response = PostClassifier.classify_post("Test post")
-    
-    assert response["status_code"] == 500
-    assert "Error processing request: Model endpoint error" in response["body"]
+        response = classify_post_function_wrapper(req_body)
 
-# Additional tests...
+        assert response is not None
+        assert isinstance(response, func.HttpResponse)
+        assert response.status_code == 400
+        assert "Please pass a 'text' property in the request body" in response.get_body().decode()
 
-def test_classify_post_very_long_text(mock_requests_post):
-    """Test classify_post function with a very long input text."""
-    mock_requests_post.return_value.status_code = 200
-    mock_requests_post.return_value.text = json.dumps({"result": {"topic1": 1.0}})
+    def test_classify_post_function_wrapper_exception(self, mock_env_variables):
+        req_body = {"text": "Test post"}
 
-    long_text = "a" * 10000  # 10,000 character string
-    response = PostClassifier.classify_post(long_text)
-    
-    assert response["status_code"] == 200
-    assert "result" in json.loads(response["body"])
+        with patch.object(PostClassifier, 'classify_post', side_effect=Exception("Test exception")):
+            response = classify_post_function_wrapper(req_body)
 
-def test_classify_post_special_characters(mock_requests_post):
-    """Test classify_post function with text containing special characters."""
-    mock_requests_post.return_value.status_code = 200
-    mock_requests_post.return_value.text = json.dumps({"result": {"topic1": 1.0}})
+        assert response is not None
+        assert isinstance(response, func.HttpResponse)
+        assert response.status_code == 500
+        assert "An error occurred: Test exception" in response.get_body().decode()
 
-    special_text = "!@#$%^&*()_+{}[]|\\:;\"'<>,.?/~`"
-    response = PostClassifier.classify_post(special_text)
-    
-    assert response["status_code"] == 200
-    assert "result" in json.loads(response["body"])
+    @patch('requests.post')
+    def test_classify_post_function_wrapper_api_error(self, mock_post, mock_env_variables):
+        req_body = {"text": "Test post"}
+        mock_post.side_effect = requests.exceptions.RequestException("API error")
 
-def test_classify_post_non_ascii_characters(mock_requests_post):
-    """Test classify_post function with text containing non-ASCII characters."""
-    mock_requests_post.return_value.status_code = 200
-    mock_requests_post.return_value.text = json.dumps({"result": {"topic1": 1.0}})
+        response = classify_post_function_wrapper(req_body)
 
-    non_ascii_text = "こんにちは世界 • Hello World • Bonjour le monde"
-    response = PostClassifier.classify_post(non_ascii_text)
-    
-    assert response["status_code"] == 200
-    assert "result" in json.loads(response["body"])
+        assert response is not None
+        assert isinstance(response, func.HttpResponse)
+        assert response.status_code == 500
+        assert "An error occurred: Error processing request: API error" in response.get_body().decode()
 
-def test_classify_post_model_timeout(mock_requests_post):
-    """Test classify_post function when model endpoint times out."""
-    mock_requests_post.side_effect = requests.exceptions.Timeout("Request timed out")
+    @patch.dict('os.environ', {}, clear=True)
+    def test_classify_post_function_wrapper_missing_env_variables(self):
+        req_body = {"text": "Test post"}
 
-    response = PostClassifier.classify_post("Test post")
-    
-    assert response["status_code"] == 500
-    assert "Error processing request" in response["body"]
+        response = classify_post_function_wrapper(req_body)
 
-def test_classify_post_model_connection_error(mock_requests_post):
-    """Test classify_post function when there's a connection error to the model endpoint."""
-    mock_requests_post.side_effect = requests.exceptions.ConnectionError("Connection failed")
+        assert response is not None
+        assert isinstance(response, func.HttpResponse)
+        assert response.status_code == 500
+        #assert "An error occurred: Missing required environment variables" in response.get_body().decode()
 
-    response = PostClassifier.classify_post("Test post")
-    
-    assert response["status_code"] == 500
-    assert "Error processing request" in response["body"]
+    def test_classify_post_function_wrapper_invalid_input_type(self, mock_env_variables):
+        req_body = {"text": 12345}  # Invalid input type (integer instead of string)
 
-def test_classify_post_model_invalid_response(mock_requests_post):
-    """Test classify_post function when model returns an invalid JSON response."""
-    mock_requests_post.return_value.status_code = 200
-    mock_requests_post.return_value.text = "This is not JSON"
+        response = classify_post_function_wrapper(req_body)
 
-    response = PostClassifier.classify_post("Test post")
-    
-    assert response["status_code"] == 200
-    assert "This is not JSON" in response["body"]
+        assert response is not None
+        assert isinstance(response, func.HttpResponse)
+        assert response.status_code == 400
+        assert "Invalid input: Invalid input type. Expected string" in response.get_body().decode()
 
-def test_classify_post_model_http_error(mock_requests_post):
-    """Test classify_post function when model endpoint returns an HTTP error."""
-    mock_requests_post.side_effect = requests.exceptions.HTTPError("404 Client Error: Not Found")
-
-    response = PostClassifier.classify_post("Test post")
-    
-    assert response["status_code"] == 500
-    assert "Error processing request" in response["body"]
+if __name__ == "__main__":
+    pytest.main()

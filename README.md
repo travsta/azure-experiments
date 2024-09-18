@@ -85,6 +85,48 @@ instagram-topic-classifier/
    ```
    conda activate instagram-topic-classifier-api
    ```
+
+### Setting up the Environments Using conda
+
+For the API environment:
+   ```
+   conda env create -f config/environment_api_local.yml
+   ```
+
+For the model environment:
+   ```
+   conda env create -f config/environment_model_local.yml
+   ```
+
+
+## Updating Environments
+If changes are made to the environment files, update your existing environments using:
+
+For the API environment:
+   ```
+   conda env update -f config/environment_api_local.yml
+   ```
+
+For the model environment:
+   ```
+   conda env update -f config/environment_model_local.yml
+   ```
+
+
+Note: Always update your environments when pulling changes that modify the environment files to ensure you have all necessary dependencies.
+## Activating Environments
+
+To activate the API environment: 
+   ```
+   conda activate instagram-topic-classifier-api
+   ```
+To activate the model environment: 
+   ```
+   conda activate instagram-topic-classifier-model
+   ```
+
+Remember to activate the appropriate environment before running tests or working on the respective components of the project.
+
 ### Azure Deployment Environments
 The environment_api_azure.yml and environment_model_azure.yml files in the config/ directory are used for deployment to Azure. These environments are set up automatically during the deployment process and don't need to be created locally.
 Note: The Azure environment files contain only the packages necessary for running the application in Azure and do not include testing packages.
