@@ -122,3 +122,20 @@ def test_non_string_text(scorer):
     
     assert "error" in result_dict
     assert "Input must be a string" in result_dict["error"]
+
+def test_scorer_initialization():
+    """
+    Test if the Scorer is initialized correctly with a DummyTopicClassifier.
+    """
+    scorer = Scorer()
+    scorer.init()
+    assert isinstance(scorer.model, DummyTopicClassifier), "Scorer is not initialized with a DummyTopicClassifier. Check the init() method in the Scorer class."
+
+def test_scorer_run_with_environment(scorer):
+    """
+    Test if the Scorer's run method works correctly with environment variables.
+    """
+    with patch.dict('os.environ', {'SOME_ENV_VAR': 'test_value'}):
+        input_data = json.dumps({"text": "Test post"})
+        result = scorer.run(input_data)
+        assert 'result' in json.loads(result), "Scorer's run method did not return a result. Check if the method is correctly processing the input and using the model."
