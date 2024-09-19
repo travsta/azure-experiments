@@ -1,7 +1,18 @@
-# Instagram Topic Classification - Azure Experiments
+# Instagram Topic Classification
 
 ## Project Overview
 This project implements a microservice for classifying Instagram posts by topic using Azure Functions and Azure Machine Learning. It provides a RESTful API endpoint that accepts the text of an Instagram post and returns probabilities for various topics.
+
+## Table of Contents
+1. [Project Structure](#project-structure)
+2. [Setup Instructions](#setup-instructions)
+3. [Development Workflow](#development-workflow)
+4. [Testing](#testing)
+5. [Deployment](#deployment)
+6. [Configuration Management](#configuration-management)
+7. [CI/CD](#cicd)
+8. [Contributing](#contributing)
+9. [License](#license)
 
 ## Project Structure
 The project is divided into two main components:
@@ -75,6 +86,51 @@ instagram-topic-classifier/
    conda activate instagram-topic-classifier-api
    ```
 
+### Setting up the Environments Using conda
+
+For the API environment:
+   ```
+   conda env create -f config/environment_api_local.yml
+   ```
+
+For the model environment:
+   ```
+   conda env create -f config/environment_model_local.yml
+   ```
+
+
+## Updating Environments
+If changes are made to the environment files, update your existing environments using:
+
+For the API environment:
+   ```
+   conda env update -f config/environment_api_local.yml
+   ```
+
+For the model environment:
+   ```
+   conda env update -f config/environment_model_local.yml
+   ```
+
+
+Note: Always update your environments when pulling changes that modify the environment files to ensure you have all necessary dependencies.
+## Activating Environments
+
+To activate the API environment: 
+   ```
+   conda activate instagram-topic-classifier-api
+   ```
+To activate the model environment: 
+   ```
+   conda activate instagram-topic-classifier-model
+   ```
+
+Remember to activate the appropriate environment before running tests or working on the respective components of the project.
+
+### Azure Deployment Environments
+The environment_api_azure.yml and environment_model_azure.yml files in the config/ directory are used for deployment to Azure. These environments are set up automatically during the deployment process and don't need to be created locally.
+Note: The Azure environment files contain only the packages necessary for running the application in Azure and do not include testing packages.
+
 ## Development Workflow
 
 ### Working on the Model
@@ -132,7 +188,7 @@ After running the tests with coverage:
 1. Terminal Report: This is displayed immediately after the tests run.
 2. HTML Report: Open `htmlcov/index.html` in a web browser for a detailed, interactive coverage report.
 
-Remember, while high coverage is important, it's equally important to have meaningful tests that verify the correct behavior of your code.
+Remember, while high coverage is important, it's equally important to have meaningful tests that verify the correct behavior of code.
 
 ## Deployment
 
@@ -142,7 +198,20 @@ Remember, while high coverage is important, it's equally important to have meani
 ### Deploying the API to Azure Functions
 (Add specific instructions for deploying the API to Azure Functions)
 
+## Configuration Management
+This project uses environment variables for configuration. To set up:
+
+1. Copy `.env.example` to `.env`
+2. Fill in the values in `.env` with your actual configuration
+
+For local development, also create a `local.settings.json` file in your function app directory.
+
+Note: Never commit your `.env` or `local.settings.json` files to version control.
+
 ## Continuous Integration
+This project uses GitHub Actions for CI/CD. The pipelines are defined in `.github/workflows/`:
+- `api-ci-cd.yml`: CI/CD for the API
+- `model-ci-cd.yml`: CI/CD for the model
 
 Our CI pipeline automatically runs tests and checks coverage for all pull requests. You can see the results in the GitHub Actions tab of the repository.
 
