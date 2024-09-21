@@ -1,4 +1,4 @@
 $schema: https://azuremlschemas.azureedge.net/latest/environment.schema.json
 name: classy-env
-image: mcr.microsoft.com/azureml/minimal-ubuntu18.04-py38-cpu-inference
+image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04:latest
 conda_file: environment_model_azure.yml
