@@ -42,7 +42,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: coverage-report-api
-        path: htmlcov/index.html
+        path: coverage.xml
     - name: Comment PR
       uses: actions/github-script@v6
       if: github.event_name == 'pull_request'
@@ -50,7 +50,7 @@ jobs:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
           const fs = require('fs');
-          const coverage = fs.readFileSync('index.html', 'utf8');
+          const coverage = fs.readFileSync('coverage.xml', 'utf8');
           const percentage = coverage.match(/line-rate="([\d.]+)"/)[1];
           const coveragePercentage = (parseFloat(percentage) * 100).toFixed(2);
           github.rest.issues.createComment({
