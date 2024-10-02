@@ -25,11 +25,11 @@ API_TEST_FILES=("tests/test_function_app.py" "tests/test_environment.py")
 if [ "$ENV" == "model" ]; then
     echo "Executing tests in: "
     echo "${MODEL_TEST_FILES[@]}"
-    pytest --cov=src/model --cov-report=term-missing --cov-report=html "${MODEL_TEST_FILES[@]}"
+    pytest --cov=src/model --cov-report=term-missing --cov-report=xml --cov-fail-under=80 "${MODEL_TEST_FILES[@]}"
 elif [ "$ENV" == "api" ]; then
     echo "Executing tests in: "
     echo "${API_TEST_FILES[@]}"
-    pytest --cov=src/api --cov-report=term-missing --cov-report=html "${API_TEST_FILES[@]}"
+    pytest --cov=src/api --cov-report=term-missing --cov-report=xml --cov-fail-under=80 "${API_TEST_FILES[@]}"
 else
     echo "Invalid environment: $ENV"
     echo "Usage: $0 <environment>"
