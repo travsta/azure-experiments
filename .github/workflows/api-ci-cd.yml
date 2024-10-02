@@ -37,7 +37,7 @@ jobs:
         conda run -n instagram-topic-classifier-api pip install pytest-cov
     - name: Run tests with coverage
       run: |
-        conda run -n instagram-topic-classifier-api
+        conda run -n instagram-topic-classifier-api bash run_tests_with_coverage.sh api
     - name: Store coverage report
       uses: actions/upload-artifact@v3
       with:
