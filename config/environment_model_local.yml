@@ -15,3 +15,5 @@ dependencies:
     - azure-functions==1.15.0
     - pytest-cov==4.0.0
     - python-dotenv==1.0.0
+    - azure-ai-ml
+    - azure-identity

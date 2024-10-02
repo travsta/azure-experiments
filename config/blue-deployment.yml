@@ -1,0 +1,9 @@
+$schema: https://azuremlschemas.azureedge.net/latest/managedOnlineDeployment.schema.json
+name: blue
+endpoint_name: exp-p-eu-topic-classifier
+code_configuration:
+  code: ../src/model/
+  scoring_script: score.py
+environment:  azureml:classy-env:9
+instance_type: Standard_DS1_v2
+instance_count: 1

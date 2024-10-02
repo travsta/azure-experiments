@@ -4,10 +4,10 @@ channels:
   - conda-forge
 dependencies:
   - python=3.11
-  - pip
+  - pip==24.2
   - numpy=1.24.3
   - scikit-learn=1.2.2
   - pip:
-    - azureml-core==1.50.0
-    - azureml-defaults==1.50.0
-    - python-dotenv==1.0.0
+    - azureml-core==1.57.0
+    - azureml-defaults==1.57.0
+    - python-dotenv==1.0.1

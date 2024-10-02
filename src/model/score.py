@@ -1,6 +1,13 @@
 import json
 from typing import Dict, Any
-from .dummy_model import DummyTopicClassifier
+import os, sys
+from pathlib import Path
+
+dir_path = Path(os.path.abspath(__file__)).parent
+
+sys.path.append(str(dir_path))
+
+from dummy_model import DummyTopicClassifier
 
 class Scorer:
     def __init__(self):
