@@ -17,8 +17,21 @@ conda activate instagram-topic-classifier-$ENV
 # Ensure pytest-cov is installed
 pip install pytest-cov
 
+# Define test files for each environment
+MODEL_TEST_FILES=("tests/test_score.py" "tests/test_dummy_model.py" "tests/test_environment.py")
+API_TEST_FILES=("tests/test_function_app.py" "tests/test_environment.py")
+
 # Run pytest with coverage
-pytest --cov=src/$ENV --cov-report=term-missing --cov-report=html tests/test_*.py
+if [ "$ENV" == "model" ]; then
+    pytest --cov=src/model --cov-report=term-missing --cov-report=html "${MODEL_TEST_FILES[@]}"
+elif [ "$ENV" == "api" ]; then
+    pytest --cov=src/api --cov-report=term-missing --cov-report=html "${API_TEST_FILES[@]}"
+else
+    echo "Invalid environment: $ENV"
+    echo "Usage: $0 <environment>"
+    echo "Where <environment> is either 'model' or 'api'"
+    exit 1
+fi
 
 # Deactivate the conda environment
 conda deactivate
