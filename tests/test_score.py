@@ -1,8 +1,8 @@
 import json
 import pytest
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 from src.model.score import Scorer
-from src.model.dummy_model import DummyTopicClassifier
+from dummy_model import DummyTopicClassifier  # Changed import to match score.py
 
 @pytest.fixture
 def scorer():
@@ -12,7 +12,9 @@ def scorer():
 
 def test_init(scorer):
     """Test that init function initializes the model correctly."""
-    assert isinstance(scorer.model, DummyTopicClassifier)
+    print(f"Scorer model type: {type(scorer.model)}")
+    print(f"DummyTopicClassifier type: {DummyTopicClassifier}")
+    assert isinstance(scorer.model, DummyTopicClassifier), f"Expected DummyTopicClassifier, got {type(scorer.model)}"
 
 def test_run_valid_input(scorer):
     """Test that run function processes valid input correctly."""
@@ -103,7 +105,7 @@ def test_missing_text_key(scorer):
     
     assert "error" in result_dict
 
-@patch.object(DummyTopicClassifier, 'predict')
+@patch('src.model.score.DummyTopicClassifier.predict')
 def test_model_error(mock_predict, scorer):
     """Test that run function handles errors from the model."""
     mock_predict.side_effect = Exception("Model prediction error")
@@ -111,7 +113,8 @@ def test_model_error(mock_predict, scorer):
     result = scorer.run(test_input)
     result_dict = json.loads(result)
     
-    assert "error" in result_dict
+    print(f"Result dict: {result_dict}")
+    assert "error" in result_dict, f"Expected 'error' key in result, got: {result_dict}"
     assert "Model prediction error" in result_dict["error"]
 
 def test_non_string_text(scorer):
@@ -129,7 +132,9 @@ def test_scorer_initialization():
     """
     scorer = Scorer()
     scorer.init()
-    assert isinstance(scorer.model, DummyTopicClassifier), "Scorer is not initialized with a DummyTopicClassifier. Check the init() method in the Scorer class."
+    print(f"Scorer model type: {type(scorer.model)}")
+    print(f"DummyTopicClassifier type: {DummyTopicClassifier}")
+    assert isinstance(scorer.model, DummyTopicClassifier), f"Scorer is not initialized with a DummyTopicClassifier. Got {type(scorer.model)}"
 
 def test_scorer_run_with_environment(scorer):
     """
