@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Exit immediately if a command exits with a non-zero status
+set -e
+
 # Check if an argument is provided
 if [ "$#" -ne 1 ]; then
     echo "Usage: $0 <environment>"
