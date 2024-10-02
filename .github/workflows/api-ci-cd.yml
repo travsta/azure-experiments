@@ -31,7 +31,7 @@ jobs:
         conda init
         conda config --set always_yes yes --set changeps1 no
         conda update -q conda
-    - name: Install additional Python dependencies
+    - name: Install additional Python dependencies for the API
       run: |
         conda env create -f config/environment_api_local.yml
         conda run -n instagram-topic-classifier-api pip install pytest-cov
