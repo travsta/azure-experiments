@@ -39,6 +39,8 @@ jobs:
       run: |
         conda env create -f config/environment_model_local.yml
         conda run -n instagram-topic-classifier-model pip install pytest-cov
+    - name: Create .env for testing
+      run: cp .env.example .env
     - name: Run tests with coverage
       run: |
         conda run -n instagram-topic-classifier-model bash scripts/run_tests_with_coverage.sh model
