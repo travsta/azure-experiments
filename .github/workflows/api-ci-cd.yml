@@ -1,0 +1,107 @@
+name: API CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'src/api/**'
+      - 'tests/**'
+      - 'config/environment_api_*.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'src/api/**'
+      - 'tests/**'
+      - 'config/environment_api_*.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write    
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.11'
+    - name: Install Miniconda
+      run: |
+        wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+        bash miniconda.sh -b -p $HOME/miniconda
+        source "$HOME/miniconda/etc/profile.d/conda.sh"
+        conda init
+        conda config --set always_yes yes --set changeps1 no
+        conda update -q conda
+    - name: Install additional Python dependencies for the API
+      run: |
+        conda env create -f config/environment_api_local.yml
+        conda run -n instagram-topic-classifier-api pip install pytest-cov
+    - name: Create .env for testing
+      run: cp .env.example .env
+    - name: Run tests with coverage
+      run: |
+        conda run -n instagram-topic-classifier-api bash scripts/run_tests_with_coverage.sh api
+    - name: Store coverage report
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-report-api
+        path: coverage.xml
+    - name: Comment PR
+      uses: actions/github-script@v6
+      if: github.event_name == 'pull_request'
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          const fs = require('fs');
+          const coverage = fs.readFileSync('coverage.xml', 'utf8');
+          const percentage = coverage.match(/line-rate="([\d.]+)"/)[1];
+          const coveragePercentage = (parseFloat(percentage) * 100).toFixed(2);
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `📊 API Coverage: ${coveragePercentage}%`
+          })
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.11'
+    - name: Install Azure Functions Core Tools
+      run: npm install -g azure-functions-core-tools@3 --unsafe-perm true
+    - name: Install dependencies
+      run: |
+        pip install conda
+        conda env create -f config/environment_api_azure.yml
+    - name: Deploy to Azure Functions
+      uses: Azure/functions-action@v1
+      id: fa
+      with:
+        app-name: ${{ secrets.AZURE_FUNCTIONAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+    - name: Set Function App settings
+      uses: Azure/appservice-settings@v1
+      with:
+        app-name: ${{ secrets.AZURE_FUNCTIONAPP_NAME }}
+        app-settings-json: |
+          [
+            {
+              "name": "MODEL_ENDPOINT_URL",
+              "value": "${{ secrets.MODEL_ENDPOINT_URL }}"
+            },
+            {
+              "name": "MODEL_KEY",
+              "value": "${{ secrets.MODEL_KEY }}"
+            }
+          ]
+      env:
+        AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}

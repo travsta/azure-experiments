@@ -1,0 +1,99 @@
+name: Model CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'src/model/**'
+      - 'tests/**'
+      - 'config/environment_model_*.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'src/model/**'
+      - 'tests/**'
+      - 'config/environment_model_*.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write    
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.11'
+    - name: Install Miniconda
+      run: |
+        wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+        bash miniconda.sh -b -p $HOME/miniconda
+        source "$HOME/miniconda/etc/profile.d/conda.sh"
+        conda init
+        conda config --set always_yes yes --set changeps1 no
+        conda update -q conda
+    - name: Install additional Python dependencies for the Model
+      run: |
+        conda env create -f config/environment_model_local.yml
+        conda run -n instagram-topic-classifier-model pip install pytest-cov
+    - name: Create .env for testing
+      run: cp .env.example .env
+    - name: Run tests with coverage
+      run: |
+        conda run -n instagram-topic-classifier-model bash scripts/run_tests_with_coverage.sh model
+    - name: Store coverage report
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-report-model
+        path: coverage.xml
+    - name: Comment PR
+      uses: actions/github-script@v6
+      if: github.event_name == 'pull_request'
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          const fs = require('fs');
+          const coverage = fs.readFileSync('coverage.xml', 'utf8');
+          const percentage = coverage.match(/line-rate="([\d.]+)"/)[1];
+          const coveragePercentage = (parseFloat(percentage) * 100).toFixed(2);
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `📊 Model Coverage: ${coveragePercentage}%`
+          })
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.11'
+    - name: Install Azure CLI
+      run: |
+        curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+    - name: Login to Azure
+      run: |
+        az login --service-principal -u ${{ secrets.AZURE_SP_CLIENT_ID }} -p ${{ secrets.AZURE_SP_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+    - name: Install Azure ML CLI
+      run: |
+        az extension add -n ml -y
+    - name: Set Azure ML Workspace
+      run: |
+        az configure --defaults group=${{ secrets.AZURE_RESOURCE_GROUP }} workspace=${{ secrets.AZURE_ML_WORKSPACE }}
+    - name: Register model
+      run: |
+        az ml model create --name dummy-topic-classifier --path ./src/model/dummy_model.py --type custom_model
+    - name: Create online endpoint
+      run: |
+        az ml online-endpoint create -f ./config/endpoint.yml
+    - name: Deploy model
+      run: |
+        az ml online-deployment create -f ./config/deployment.yml --all-traffic

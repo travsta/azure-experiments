@@ -1,0 +1,11 @@
+name: instagram-topic-classifier-api
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - requests=2.31.0
+  - pip:
+    - azure-functions==1.15.0
+    - python-dotenv==1.0.0
