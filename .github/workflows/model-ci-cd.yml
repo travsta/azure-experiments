@@ -94,10 +94,10 @@ jobs:
       run: |
         az ml model create --name dummy-topic-classifier --path src/model/dummy_model.py --type custom_model
     - name: Create online endpoint
-      if: ${{ github.ref == 'refs/heads/main' && github.event.head_commit.modified.includes('config/classifier-endpoint.yml') }}
+      if: ${{ github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, 'config/classifier-endpoint.yml') }}
       run: |
         az ml online-endpoint update -f config/classifier-endpoint.yml
     - name: Deploy model
-      if: ${{ github.ref == 'refs/heads/main' && github.event.head_commit.modified.includes('config/classifier-endpoint.yml','src/model/scorer.py','src/model/dummy_model.py') }}
+      if: ${{ github.ref == 'refs/heads/main' && (contains(github.event.head_commit.message, 'config/classifier-endpoint.yml') || contains(github.event.head_commit.message, 'src/model/scorer.py') || contains(github.event.head_commit.message, 'src/model/dummy_model.py')) }}
       run: |
         az ml online-deployment create -f config/blue-deployment.yml --all-traffic
