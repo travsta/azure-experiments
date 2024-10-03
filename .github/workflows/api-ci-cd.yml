@@ -94,11 +94,6 @@ jobs:
     - name: Install additional Python dependencies for the API
       run: |
         conda env create -f config/environment_api_azure.yml
-    # - name: Package application
-    #   run: |
-    #     mkdir package
-    #     cp -r src/api package/
-    #     zip -r functionapp.zip package
     - name: Deploy to Azure Functions
       uses: Azure/functions-action@v1
       id: deploy-to-function
@@ -109,10 +104,13 @@ jobs:
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_DB27E5D8C3374C1C83A52ED1F944851D }}
         scm-do-build-during-deployment: true
         enable-oryx-build: true
-    - name: Set Function App settings
-      uses: Azure/appservice-settings@v1
+    - name: Configure Azure Web App settings
+      uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ secrets.AZURE_FUNCTIONAPP_NAME }}
-        app-settings-json: '[{"name": "MODEL_ENDPOINT_URL","value": "${{ secrets.MODEL_ENDPOINT_URL }}"},{"name": "MODEL_KEY","value": "${{ secrets.MODEL_KEY }}"}]'
-      env:
-        AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_DB27E5D8C3374C1C83A52ED1F944851D }}
+        app-settings: |
+          - name: MODEL_ENDPOINT_URL
+            value: ${{ secrets.MODEL_ENDPOINT_URL }}
+          - name: MODEL_KEY
+            value: ${{ secrets.MODEL_KEY }}
