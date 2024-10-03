@@ -16,6 +16,9 @@ on:
       - 'config/environment_api_*.yml'
       - '.github/workflows/**'
 
+env:
+  ACTIONS_RUNNER_DEBUG: 'true' #enable detailed logging
+
 jobs:
   test:
     runs-on: ubuntu-latest
