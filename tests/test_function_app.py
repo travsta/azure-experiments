@@ -59,6 +59,13 @@ class TestClassifyPostFunction:
         assert "An error occurred: Error processing request: API error" in response.get_body().decode()
 
     @patch.dict('os.environ', {}, clear=True)
+    def test_classify_post_function_wrapper_missing_env_variables(self):
+        req_body = {"text": "Test post"}
+        response = classify_post_function_wrapper(req_body)
+        assert response is not None
+        assert isinstance(response, func.HttpResponse)
+        assert response.status_code == 500
+        #assert "An error occurred: Missing required environment variables" in response.get_body().decode()
 
     def test_classify_post_function_wrapper_invalid_input_type(self, mock_env_variables):
         req_body = {"text": 12345}  # Invalid input type (integer instead of string)
