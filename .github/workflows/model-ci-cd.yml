@@ -93,7 +93,7 @@ jobs:
         az ml model create --name dummy-topic-classifier --path ./src/model/dummy_model.py --type custom_model
     - name: Create online endpoint
       run: |
-        az ml online-endpoint create -f ./config/endpoint.yml
+        az ml online-endpoint create -f ./config/classifier-endpoint.yml
     - name: Deploy model
       run: |
         az ml online-deployment create -f ./config/deployment.yml --all-traffic
