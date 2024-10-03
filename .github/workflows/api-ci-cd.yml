@@ -113,10 +113,6 @@ jobs:
       uses: Azure/appservice-settings@v1
       with:
         app-name: ${{ secrets.AZURE_FUNCTIONAPP_NAME }}
-        app-settings-json: |
-          - name: MODEL_ENDPOINT_URL
-            value: '${{ secrets.MODEL_ENDPOINT_URL }}'
-          - name: MODEL_KEY
-            value: '${{ secrets.MODEL_KEY }}'
+        app-settings-json: '[{"name": "MODEL_ENDPOINT_URL","value": "${{ secrets.MODEL_ENDPOINT_URL }}"},{"name": "MODEL_KEY","value": "${{ secrets.MODEL_KEY }}"}]'
       env:
         AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
