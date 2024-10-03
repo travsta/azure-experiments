@@ -105,7 +105,7 @@ jobs:
       with:
         app-name: ${{ secrets.AZURE_FUNCTIONAPP_NAME }}
         # package: functionapp.zip
-        package: src/api/function_app.py
+        package: src/api/
         publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
     - name: Set Function App settings
       uses: Azure/appservice-settings@v1
