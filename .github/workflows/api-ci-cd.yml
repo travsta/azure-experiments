@@ -7,12 +7,14 @@ on:
       - 'src/api/**'
       - 'tests/**'
       - 'config/environment_api_*.yml'
+      - '.github/workflows/**'
   pull_request:
     branches: [ main ]
     paths:
       - 'src/api/**'
       - 'tests/**'
       - 'config/environment_api_*.yml'
+      - '.github/workflows/**'
 
 jobs:
   test:
