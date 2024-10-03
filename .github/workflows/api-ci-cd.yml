@@ -39,8 +39,8 @@ jobs:
       run: |
         conda env create -f config/environment_api_local.yml
         conda run -n instagram-topic-classifier-api pip install pytest-cov
-    - name: Create dummy .env
-      run: bash cp .env.example .env
+    - name: Create .env for testing
+      run: bash mv .env.example .env
     - name: Run tests with coverage
       run: |
         conda run -n instagram-topic-classifier-api bash scripts/run_tests_with_coverage.sh api
