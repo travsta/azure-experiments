@@ -78,9 +78,16 @@ jobs:
         python-version: '3.11'
     - name: Install Azure Functions Core Tools
       run: npm install -g azure-functions-core-tools@3 --unsafe-perm true
-    - name: Install dependencies
+    - name: Install Miniconda
       run: |
-        pip install conda
+        wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+        bash miniconda.sh -b -p $HOME/miniconda
+        source "$HOME/miniconda/etc/profile.d/conda.sh"
+        conda init
+        conda config --set always_yes yes --set changeps1 no
+        conda update -q conda
+    - name: Install additional Python dependencies for the API
+      run: |
         conda env create -f config/environment_api_azure.yml
     - name: Deploy to Azure Functions
       uses: Azure/functions-action@v1
