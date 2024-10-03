@@ -74,6 +74,9 @@ jobs:
   deploy:
     needs: test
     runs-on: ubuntu-latest
+    environment: 
+      name: 'Production'
+      url: ${{ steps.deploy-to-function.outputs.webapp-url }}
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     steps:
     - uses: actions/checkout@v4
