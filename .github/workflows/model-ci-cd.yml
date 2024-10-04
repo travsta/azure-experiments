@@ -104,4 +104,4 @@ jobs:
     - name: Adjust Traffic Allocation
       # if: ${{ github.ref == 'refs/heads/main' && (contains(github.event.head_commit.message, 'config/classifier-endpoint.yml') || contains(github.event.head_commit.message, 'src/model/scorer.py') || contains(github.event.head_commit.message, 'src/model/dummy_model.py') || contains(github.event.head_commit.message, 'config/green-deployment.yml')) }}
       run: |
-        az ml online-endpoint update --name <your-endpoint-name> --traffic blue=90 green=10
+        az ml online-endpoint update --name exp-p-eu-topic-classifier --traffic blue=90 green=10
