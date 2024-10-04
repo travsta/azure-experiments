@@ -28,7 +28,7 @@ class Scorer:
             str: A JSON string containing the prediction results or an error message.
         """
         if self.model is None:
-            return json.dumps({"error": "Model not initialized. Call init() first."})
+            return json.dumps({"error": "Model not initialized. Call init() first. "})
 
         try:
             # Parse incoming data
