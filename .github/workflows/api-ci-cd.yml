@@ -18,6 +18,7 @@ on:
 
 env:
   ACTIONS_RUNNER_DEBUG: 'true' #enable detailed logging
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: './src/api/' 
 
 jobs:
   test:
