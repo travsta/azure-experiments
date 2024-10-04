@@ -96,9 +96,7 @@ def classify_post_function(req: func.HttpRequest) -> func.HttpResponse:
 if __name__ == "__main__":
     print("Use pytest to test this script")
     # from flask import Flask, request, jsonify
-    
     # app = Flask(__name__)
-    
     # @app.route("/api/classify_post", methods=["POST"])
     # def classify_post_local():
     #     post_text = request.json.get('text', '')
