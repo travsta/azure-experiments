@@ -2,8 +2,11 @@ import http.client
 import json
 
 def test_api():
-    conn = http.client.HTTPSConnection("https://exp-p-eu-topic-classifier-api.azurewebsites.net/api/classify_post")
-    conn.request("POST", "/health")
+    conn = http.client.HTTPSConnection("exp-p-eu-topic-classifier-api.azurewebsites.net")
+    payload = json.dumps({"text": "value"})
+    headers = {'Content-Type': 'application/json'}
+    
+    conn.request("POST", "/api/classify_post", body=payload, headers=headers)
     response = conn.getresponse()
     
     assert response.status == 200
