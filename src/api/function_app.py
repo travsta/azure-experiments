@@ -36,9 +36,9 @@ class PostClassifier:
                     "status_code": response.getcode()
                 }
         except urllib.error.HTTPError as e:
-            raise Exception(f"the HTTP error occurred: {e.code} {e.reason}")
+            raise Exception(f"HTTP error occurred: {e.code} {e.reason} "+model_url)
         except urllib.error.URLError as e:
-            raise Exception(f"AN URL error occurred: {e.reason}")
+            raise Exception(f"URL error occurred: {e.reason}")
 
 def classify_post_function_wrapper(req_body):
     if not env_model_url or not env_model_key:
@@ -73,7 +73,7 @@ def classify_post_function_wrapper(req_body):
     except Exception as e:
         return func.HttpResponse(
             body=f"An error occurred: {str(e)}",
-            status_code=501,
+            status_code=500,
             mimetype="application/json"
         )
 
