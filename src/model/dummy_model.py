@@ -35,6 +35,7 @@ class DummyTopicClassifier:
         return self.topics
 
 if __name__ == "__main__":
+    # for local testing
     classifier: DummyTopicClassifier = DummyTopicClassifier()
     sample_text: str = "This is a sample Instagram post."
     result: Dict[str, float] = classifier.predict(sample_text)
