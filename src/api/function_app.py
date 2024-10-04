@@ -1,5 +1,6 @@
 import json
-import requests
+import urllib.request
+import urllib.error
 import azure.functions as func
 import os
 from dotenv import load_dotenv
@@ -24,15 +25,20 @@ class PostClassifier:
             'Content-Type': 'application/json',
             'Authorization': f'Bearer {self.model_key}'
         }
-        data = json.dumps({"text": post_text})
+        data = json.dumps({"text": post_text}).encode('utf-8')
         
-        response = requests.post(self.model_url, data=data, headers=headers)
-        response.raise_for_status()
+        req = urllib.request.Request(self.model_url, data=data, headers=headers, method='POST')
         
-        return {
-            "body": response.text,
-            "status_code": 200
-        }
+        try:
+            with urllib.request.urlopen(req) as response:
+                return {
+                    "body": response.read().decode('utf-8'),
+                    "status_code": response.getcode()
+                }
+        except urllib.error.HTTPError as e:
+            raise Exception(f"HTTP error occurred: {e.code} {e.reason}")
+        except urllib.error.URLError as e:
+            raise Exception(f"URL error occurred: {e.reason}")
 
 def classify_post_function_wrapper(req_body):
     if not env_model_url or not env_model_key:
@@ -64,12 +70,6 @@ def classify_post_function_wrapper(req_body):
             status_code=400,
             mimetype="application/json"
         )
-    except requests.exceptions.RequestException as e:
-        return func.HttpResponse(
-            body=f"An error occurred: Error processing request: {str(e)}",
-            status_code=500,
-            mimetype="application/json"
-        )
     except Exception as e:
         return func.HttpResponse(
             body=f"An error occurred: {str(e)}",
@@ -97,6 +97,6 @@ if __name__ == "__main__":
     #     post_text = request.json.get('text', '')
     #     classifier = PostClassifier(env_model_url, env_model_key)
     #     result = classifier.classify_post(post_text)
-    #     return jsonify(result["body"]), result["status_code"]
+    #     return jsonify(json.loads(result["body"])), result["status_code"]
     
     # app.run(debug=True, port=7071)
