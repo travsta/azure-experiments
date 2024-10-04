@@ -14,7 +14,7 @@ on:
       - 'src/api/**'
       - 'tests/**'
       - 'config/environment_api_*.yml'
-      - '.github/workflows/**'
+      - '.github/workflows/api-ci-cd.yml'
 
 env:
   ACTIONS_RUNNER_DEBUG: 'true' #enable detailed logging
