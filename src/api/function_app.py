@@ -36,7 +36,7 @@ class PostClassifier:
                     "status_code": response.getcode()
                 }
         except urllib.error.HTTPError as e:
-            raise Exception(f"HTTP error occurred: {e.code} {e.reason} "+model_url)
+            raise Exception(f"HTTP error occurred: {e.code} {e.reason} "+self.model_url)
         except urllib.error.URLError as e:
             raise Exception(f"URL error occurred: {e.reason}")
 
