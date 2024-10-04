@@ -43,7 +43,7 @@ class PostClassifier:
 def classify_post_function_wrapper(req_body):
     if not env_model_url or not env_model_key:
         return func.HttpResponse(
-            body="An error occurred: Missing required environment variables",
+            body="An error occurred: Missing required environment variables ",
             status_code=500,
             mimetype="application/json"
         )
