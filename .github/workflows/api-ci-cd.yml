@@ -79,45 +79,37 @@ jobs:
       url: ${{ steps.deploy-to-function.outputs.webapp-url }}
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     steps:
-    - uses: actions/checkout@v4
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@v4
+      
     - name: Set up Python
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v4
       with:
         python-version: '3.11'
-    - name: Install Azure Functions Core Tools
-      run: npm install -g azure-functions-core-tools@3 --unsafe-perm true
-    - name: Install Miniconda
+
+    - name: 'Grab requirements.txt'
+      run: cp config/requirements.txt ./src/api/
+
+    - name: 'Create .env'
       run: |
-        wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
-        bash miniconda.sh -b -p $HOME/miniconda
-        source "$HOME/miniconda/etc/profile.d/conda.sh"
-        conda init
-        conda config --set always_yes yes --set changeps1 no
-        conda update -q conda
-    - name: Install additional Python dependencies for the API
+        touch ./src/api/.env
+        echo "MODEL_ENDPOINT_URL=${{ secrets.MODEL_ENDPOINT_URL }}" >> ./src/api/.env
+        echo "MODEL_KEY=${{ secrets.MODEL_KEY }}" >> ./src/api/.env
+
+    - name: 'Resolve Project Dependencies Using Pip'
+      shell: bash
       run: |
-        conda env create -f config/environment_api_azure.yml
-    - name: Prepare to Deploy to Azure Functions
-      run: |
-        cp src/api/* ./
-        cp config/host.json ./
+        pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt --target=".python_packages/lib/site-packages"
+        popd
+
     - name: Deploy to Azure Functions
       uses: Azure/functions-action@v1
       id: deploy-to-function
       with:
-        app-name: ${{ secrets.AZURE_FUNCTIONAPP_NAME }}
-        # package: src/api/
-        slot-name: 'Production'
-        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_DB27E5D8C3374C1C83A52ED1F944851D }}
+        app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+        package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+        publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }} # Remove publish-profile to use Azure RBAC
         scm-do-build-during-deployment: true
         enable-oryx-build: true
-    - name: Configure Azure Web App settings
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: ${{ secrets.AZURE_FUNCTIONAPP_NAME }}
-        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_DB27E5D8C3374C1C83A52ED1F944851D }}
-        app-settings: |
-          - name: MODEL_ENDPOINT_URL
-            value: ${{ secrets.MODEL_ENDPOINT_URL }}
-          - name: MODEL_KEY
-            value: ${{ secrets.MODEL_KEY }}
