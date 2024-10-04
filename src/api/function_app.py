@@ -80,7 +80,7 @@ def classify_post_function_wrapper(req_body):
 app = func.FunctionApp()
 
 @app.function_name(name="ClassifyPost")
-@app.route(route="classify_post", auth_level=func.AuthLevel.FUNCTION)
+@app.route(route="classify_post", auth_level=func.AuthLevel.ANONYMOUS)
 def classify_post_function(req: func.HttpRequest) -> func.HttpResponse:
     req_body = req.get_json()
     return classify_post_function_wrapper(req_body)
