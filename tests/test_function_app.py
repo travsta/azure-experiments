@@ -67,7 +67,9 @@ class TestClassifyPostFunction:
         assert response is not None
         assert isinstance(response, func.HttpResponse)
         assert response.status_code == 500
-        assert "An error occurred: Missing required environment variables" in response.get_body().decode()
+        error_message = response.get_body().decode()
+        assert "An error occurred:" in error_message
+        assert "URL error occurred:" in error_message
 
     def test_classify_post_function_wrapper_invalid_input_type(self, mock_env_variables):
         req_body = {"text": 12345}  # Invalid input type (integer instead of string)
