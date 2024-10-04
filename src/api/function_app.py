@@ -86,7 +86,7 @@ def classify_post_function(req: func.HttpRequest) -> func.HttpResponse:
         req_body = req.get_json()
     except ValueError as e:
         return func.HttpResponse(
-            body=f"Invalid JSON: {str(e)}",
+            body=f"Invalid JSON: {str(e)} "+req.get_body(),
             status_code=400,
             mimetype="application/json"
         )
