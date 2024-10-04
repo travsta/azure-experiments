@@ -98,7 +98,9 @@ jobs:
       run: |
         conda env create -f config/environment_api_azure.yml
     - name: Prepare to Deploy to Azure Functions
-      run: cp src/api/* ./
+      run: |
+        cp src/api/* ./
+        cp config/host.json ./
     - name: Deploy to Azure Functions
       uses: Azure/webapps-deploy@v2
       id: deploy-to-function
