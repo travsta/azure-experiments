@@ -129,4 +129,4 @@ jobs:
           python-version: '3.11'
 
       - name: Run smoke tests
-        run: python tests/smoke_test.py
+        run: python tests/smoke.py
