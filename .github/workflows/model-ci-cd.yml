@@ -5,14 +5,14 @@ on:
     branches: [ main ]
     paths:
       - 'src/model/**'
-      - 'tests/**'
+      - 'tests/test_**'
       - 'config/environment_model_*.yml'
       - '.github/workflows/model-ci-cd.yml'
   pull_request:
     branches: [ main ]
     paths:
       - 'src/model/**'
-      - 'tests/**'
+      - 'tests/test_**'
       - 'config/environment_model_*.yml'
       - '.github/workflows/model-ci-cd.yml'
 
