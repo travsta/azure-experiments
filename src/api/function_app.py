@@ -41,9 +41,9 @@ class PostClassifier:
             raise Exception(f"URL error occurred: {e.reason}")
 
 def classify_post_function_wrapper(req_body):
-    if not env_model_url or not env_model_key:
+    if not env_model_url or not env_model_key or True:
         return func.HttpResponse(
-            body="An error occurred: Missing required environment variables",
+            body="An error occurred: Missing required environment variables and "+json.dumps(req_body),
             status_code=500,
             mimetype="application/json"
         )
@@ -86,7 +86,7 @@ def classify_post_function(req: func.HttpRequest) -> func.HttpResponse:
         req_body = req.get_json()
     except ValueError as e:
         return func.HttpResponse(
-            body=f"Invalid JSON: {str(e)} "+req.get_body(),
+            body=f"Invalid JSON: {str(e)} ",
             status_code=400,
             mimetype="application/json"
         )
