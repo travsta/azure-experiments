@@ -49,6 +49,12 @@ jobs:
     - name: 'Grab requirements.txt'
       run: cp config/requirements.txt ./src/api/
 
+    - name: 'Create .env'
+      run: |
+        touch ./src/api/.env
+        echo "MODEL_ENDPOINT_URL=${{ secrets.MODEL_ENDPOINT_URL }}" >> ./src/api/.env
+        echo "MODEL_KEY=${{ secrets.MODEL_KEY }}" >> ./src/api/.env
+
     - name: 'Resolve Project Dependencies Using Pip'
       shell: bash
       run: |
