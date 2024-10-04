@@ -7,14 +7,14 @@ on:
       - 'src/model/**'
       - 'tests/**'
       - 'config/environment_model_*.yml'
-      - '.github/workflows/**'
+      - '.github/workflows/model-ci-cd.yml'
   pull_request:
     branches: [ main ]
     paths:
       - 'src/model/**'
       - 'tests/**'
       - 'config/environment_model_*.yml'
-      - '.github/workflows/**'
+      - '.github/workflows/model-ci-cd.yml'
 
 jobs:
   test:
