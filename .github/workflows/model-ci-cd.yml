@@ -94,14 +94,14 @@ jobs:
       run: |
         az ml model create --name dummy-topic-classifier --path src/model/dummy_model.py --type custom_model
     - name: Create online endpoint
-      if: ${{ github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, 'config/classifier-endpoint.yml') }}
+      # if: ${{ github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, 'config/classifier-endpoint.yml') }}
       run: |
         az ml online-endpoint update -f config/classifier-endpoint.yml
     - name: Deploy model
-      if: ${{ github.ref == 'refs/heads/main' && (contains(github.event.head_commit.message, 'config/classifier-endpoint.yml') || contains(github.event.head_commit.message, 'src/model/scorer.py') || contains(github.event.head_commit.message, 'src/model/dummy_model.py') || contains(github.event.head_commit.message, 'config/green-deployment.yml')) }}
+      # if: ${{ github.ref == 'refs/heads/main' && (contains(github.event.head_commit.message, 'config/classifier-endpoint.yml') || contains(github.event.head_commit.message, 'src/model/scorer.py') || contains(github.event.head_commit.message, 'src/model/dummy_model.py') || contains(github.event.head_commit.message, 'config/green-deployment.yml')) }}
       run: |
         az ml online-deployment create -f config/green-deployment.yml 
     - name: Adjust Traffic Allocation
-      if: ${{ github.ref == 'refs/heads/main' && (contains(github.event.head_commit.message, 'config/classifier-endpoint.yml') || contains(github.event.head_commit.message, 'src/model/scorer.py') || contains(github.event.head_commit.message, 'src/model/dummy_model.py') || contains(github.event.head_commit.message, 'config/green-deployment.yml')) }}
+      # if: ${{ github.ref == 'refs/heads/main' && (contains(github.event.head_commit.message, 'config/classifier-endpoint.yml') || contains(github.event.head_commit.message, 'src/model/scorer.py') || contains(github.event.head_commit.message, 'src/model/dummy_model.py') || contains(github.event.head_commit.message, 'config/green-deployment.yml')) }}
       run: |
         az ml online-endpoint update --name <your-endpoint-name> --traffic blue=90 green=10
