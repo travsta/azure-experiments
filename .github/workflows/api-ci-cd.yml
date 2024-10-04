@@ -77,9 +77,9 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     environment: 
-      name: 'Production'
+      name: 'green'
       url: ${{ steps.deploy-to-function.outputs.webapp-url }}
-    # if: ${{ github.ref == 'refs/heads/main' && (contains(github.event.head_commit.message, 'config/host.json') || contains(github.event.head_commit.message, 'src/api/function_app.py') || contains(github.event.head_commit.message, 'config/environment_api_azure.yml') || contains(github.event.head_commit.message, 'config/requirements.txt')) }}
+    if: ${{ github.ref == 'refs/heads/main' && (contains(github.event.head_commit.message, 'config/host.json') || contains(github.event.head_commit.message, 'src/api/function_app.py') || contains(github.event.head_commit.message, 'config/environment_api_azure.yml') || contains(github.event.head_commit.message, 'config/requirements.txt')) }}
     steps:
     - name: 'Checkout GitHub Action'
       uses: actions/checkout@v4
