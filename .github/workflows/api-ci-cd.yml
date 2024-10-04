@@ -5,14 +5,14 @@ on:
     branches: [ main ]
     paths:
       - 'src/api/**'
-      - 'tests/**'
+      - 'tests/test_**'
       - 'config/environment_api_*.yml'
       - '.github/workflows/api-ci-cd.yml'
   pull_request:
     branches: [ main ]
     paths:
       - 'src/api/**'
-      - 'tests/**'
+      - 'tests/test_**'
       - 'config/environment_api_*.yml'
       - '.github/workflows/api-ci-cd.yml'
 
