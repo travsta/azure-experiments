@@ -102,13 +102,15 @@ jobs:
         cp src/api/* ./
         cp config/host.json ./
     - name: Deploy to Azure Functions
-      uses: Azure/webapps-deploy@v2
+      uses: Azure/wfunctions-action@v1
       id: deploy-to-function
       with:
         app-name: ${{ secrets.AZURE_FUNCTIONAPP_NAME }}
         # package: src/api/
         slot-name: 'Production'
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_DB27E5D8C3374C1C83A52ED1F944851D }}
+        scm-do-build-during-deployment: true
+        enable-oryx-build: true
     - name: Configure Azure Web App settings
       uses: azure/webapps-deploy@v2
       with:
