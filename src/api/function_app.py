@@ -82,7 +82,14 @@ app = func.FunctionApp()
 @app.function_name(name="ClassifyPost")
 @app.route(route="classify_post", auth_level=func.AuthLevel.ANONYMOUS)
 def classify_post_function(req: func.HttpRequest) -> func.HttpResponse:
-    req_body = req.get_json()
+    try:
+        req_body = req.get_json()
+    except ValueError as e:
+        return func.HttpResponse(
+            body=f"Invalid JSON: {str(e)}",
+            status_code=400,
+            mimetype="application/json"
+        )
     return classify_post_function_wrapper(req_body)
 
 if __name__ == "__main__":
