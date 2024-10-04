@@ -92,9 +92,9 @@ def classify_post_function(req: func.HttpRequest) -> func.HttpResponse:
         )
     return classify_post_function_wrapper(req_body)
 
+# This is for local testing only
 if __name__ == "__main__":
     print("Use pytest to test this script")
-    # This is for local testing only
     # from flask import Flask, request, jsonify
     
     # app = Flask(__name__)
