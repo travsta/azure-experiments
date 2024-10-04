@@ -36,14 +36,14 @@ class PostClassifier:
                     "status_code": response.getcode()
                 }
         except urllib.error.HTTPError as e:
-            raise Exception(f"HTTP error occurred: {e.code} {e.reason}")
+            raise Exception(f"the HTTP error occurred: {e.code} {e.reason}")
         except urllib.error.URLError as e:
-            raise Exception(f"URL error occurred: {e.reason}")
+            raise Exception(f"AN URL error occurred: {e.reason}")
 
 def classify_post_function_wrapper(req_body):
-    if not env_model_url or not env_model_key or True:
+    if not env_model_url or not env_model_key:
         return func.HttpResponse(
-            body="An error occurred: Missing required environment variables and "+json.dumps(req_body)+req_body.get('text'),
+            body="An error occurred: Missing required environment variables",
             status_code=500,
             mimetype="application/json"
         )
@@ -73,7 +73,7 @@ def classify_post_function_wrapper(req_body):
     except Exception as e:
         return func.HttpResponse(
             body=f"An error occurred: {str(e)}",
-            status_code=500,
+            status_code=501,
             mimetype="application/json"
         )
 
