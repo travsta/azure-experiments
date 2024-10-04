@@ -103,5 +103,4 @@ if __name__ == "__main__":
     #     classifier = PostClassifier(env_model_url, env_model_key)
     #     result = classifier.classify_post(post_text)
     #     return jsonify(json.loads(result["body"])), result["status_code"]
-    
     # app.run(debug=True, port=7071)
