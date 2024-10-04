@@ -25,7 +25,11 @@ def test_api():
         json_data = json.loads(data)
         
         # Check if the response JSON matches the expected output
-        assert json_data == {"status": "ok"}, f"Expected response {{'status': 'ok'}}, got {json_data}"
+        expected_response = {"status": "ok"}
+        assert json_data == expected_response, (
+            f"Expected response {expected_response}, got {json_data}. "
+            f"Full response: {data}"
+        )
     
     except http.client.HTTPException as e:
         print(f"HTTP error occurred: {e}")
