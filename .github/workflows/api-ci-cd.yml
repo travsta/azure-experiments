@@ -116,7 +116,7 @@ jobs:
         scm-do-build-during-deployment: true
         enable-oryx-build: true
 
-  e2e-test:
+  smoke-test:
     needs: deploy
     runs-on: ubuntu-latest
     steps:
