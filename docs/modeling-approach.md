@@ -39,7 +39,7 @@ This document outlines an approach to discover and classify topics in Instagram 
 
 ### 3.2 Sampling to Improve Initial Categorization
 - We will use an incremntal sampling approach to improve the list of categories until we have processed the initial data set
-- Th classification model can begin to be used once a sufficient sample has been used to train the model
+- The classification model can begin to be used once a sufficient sample has been used to train the model
 
 ### 3.3 Subsequent Post Processing
 - For each new post after the initial training and incremental updates during training:
