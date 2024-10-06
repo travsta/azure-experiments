@@ -24,34 +24,54 @@ Each component has separate Conda environments for local development and Azure d
 ### Directory Structure
 ```
 instagram-topic-classifier/
-├── src/
-│   ├── model/                       # Model-related code
-│   │   ├── dummy_model.py           # Implementation of the DummyTopicClassifier
-│   │   └── score.py                 # Script for Azure ML model deployment
-│   └── api/
-│       └── function_app.py          # Azure Function API implementation
-├── tests/                           # Model and API tests
-├── scripts/
-│   ├── create_model_env.sh
-│   ├── create_api_env.sh
-│   └── run_tests_with_coverage.sh
-├── docs/
-│   └── architecture.md              # Detailed architecture description
+│
 ├── .github/
 │   └── workflows/
 │       ├── model-ci-cd.yml          # CI/CD pipeline for the model
 │       └── api-ci-cd.yml            # CI/CD pipeline for the API
+│
+├── src/
+│   ├── model/
+│   │   ├── dummy_model.py           # Implementation of the DummyTopicClassifier
+│   │   └── score.py                 # Script for Azure ML model deployment
+│   │
+│   └── api/
+│       └── function_app.py          # Azure Function implementation
+│
+├── tests/
+│   ├── test_dummy_model.py          # Unit tests for dummy_model.py
+│   ├── test_score.py                # Unit tests for score.py
+│   ├── test_function_app.py         # Unit tests for function_app.py
+│   └── smoke.py                     # End to end test for app after deployed to Azure
+│
 ├── config/
-│   ├── endpoint.yml                 # Azure ML endpoint configuration
-│   ├── deployment.yml               # Azure ML deployment configuration
+│   ├── azure_environment.yml        # Azure ML environment configuration
+│   ├── classifier-endpoint.yml      # Azure ML endpoint configuration
+│   ├── blue-deployment.yml          # Azure ML configuration for stable blue deployments as part of blue/green strategy
+│   ├── green-deployment.yml         # Azure ML configuration for novel green deployments as part of blue/green strategy
 │   ├── environment_api_local.yml    # Conda environment specification for local API development
 │   ├── environment_api_azure.yml    # Conda environment specification for API deployment on Azure
 │   ├── environment_model_local.yml  # Conda environment specification for local model development
 │   ├── environment_model_azure.yml  # Conda environment specification for model deployment on Azure
+│   ├── requirements.txt             # Pytest configuration file
+│   ├── host.json                    # Pytest configuration file
 │   └── pytest.ini                   # Pytest configuration file
-├── .gitignore
-├── LICENSE
-└── README.md                        # This file
+│
+├── docs/
+│   ├── modelling-approach.md        # Explanation of approach to development and maintenance of the supporting model
+│   └── architecture.md              # Detailed architecture description
+│
+├── scripts/
+│   ├── create_api_env.sh            # Script to create API development environment
+│   ├── create_model_env.sh          # Script to create model development environment
+│   └── run_tests_with_coverage.sh   # Script to run tests with coverage
+│
+├── .gitignore                       # Specifies intentionally untracked files for git to ignore
+├── .funcignore                      # Specifies intentionally untracked files for azure functions deployment actions to ignore
+├── .env.example                     # Sample .env file for configuring the API in local runs/tests
+├── LICENSE                          # License file
+├── README.md                        # Project overview and setup instructions
+└── REPO_STRUCTURE.md                # This file
 ```
 
 ## Setup Instructions
