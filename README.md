@@ -314,9 +314,15 @@ Now that you have created the necessary Azure resources, you need to set up seve
    g. `AZURE_ML_ENDPOINT_NAME`
       - In GitHub, click "New repository secret".
       - Name: `AZURE_ML_ENDPOINT_NAME`
-      - Value: The name of your Azure ML endpoint you created earlier (e.g., "exp-p-eu-topic-classifier").
+      - Value: The name of your Azure ML endpoint you created earlier.
+  
+   h. `AZURE_FUNCTIONAPP_NAME`
+      - In the Azure Portal, in your Function App details, the name.
+      - In GitHub, click "New repository secret".
+      - Name: `AZURE_FUNCTIONAPP_NAME`
+      - Value: Paste the function app name.
 
-5. **Verify your secrets**
+6. **Verify your secrets**
    - After adding all secrets, you should see them listed (with values hidden) in the "Actions secrets" section.
 
 These secrets will be securely used by the GitHub Actions workflows to authenticate and interact with your Azure resources during the deployment process.
