@@ -339,6 +339,31 @@ After correctly configuring your Azure workspace and github secrets, the pipelin
 
 After correctly configuring your Azure workspace and github secrets, the pipeline from api-ci-cd.yml can be used to deploy the API from the Actions tab.
 
+## Blue-Green Deployment Process
+1. Pipelines deploy new versions to 'green' slot
+2. Run smoke tests against 'green' slot
+3. Gradually shift traffic from 'blue' to 'green'
+4. Monitor for any issues
+5. If successful, update 'blue' slot to match 'green'
+6. If issues occur, revert traffic back to 'blue'
+
+Criteria for full shift to green:
+- All smoke tests pass
+- Error rate below threshold
+- Response times within acceptable range
+- No significant increase in resource usage
+
+## Scaling and Stress Testing
+### Scaling
+- Azure Functions: Auto-scales based on the number of events it needs to process
+- Azure ML: Can be scaled by adjusting the AKS cluster
+
+### Stress Testing
+1. Use tools like Apache JMeter or Locust for load testing
+2. Create test scenarios mimicking expected traffic patterns
+3. Monitor performance metrics in Azure Monitor
+4. Adjust scaling settings based on test results
+
 ## Configuration Management
 This project uses environment variables for configuration. To set up:
 
@@ -356,9 +381,20 @@ This project uses GitHub Actions for CI/CD. The pipelines are defined in `.githu
 
 Our CI pipeline automatically runs tests and checks coverage for all pull requests. You can see the results in the GitHub Actions tab of the repository.
 
-TODO
-
 The pipeline will post a comment on your pull request with the current coverage percentages for both the model and API components.
+
+## Future Enhancements
+1. Rate Limiting
+   - Implement rate limiting in Azure API Management and storage warnings to manage cost
+2. Azure Monitor Integration
+   - Set up more comprehensive monitoring using Azure Monitor
+3. Containerization
+   - Migrate to a containerized solution deployed on Azure Kubernetes Service (AKS) with custom components to allow more granular control
+4. Additional Testing
+   - Implement more extensive integration and regression tests
+   - Set up continuous testing pipelines independently from deployment pipelines to reduce unnecessary test execution
+5. Security Enhancements
+   - Implement Azure AD authentication or key based auth depending on other business and integration reqs
 
 ## Contributing
 1. Fork the repository
