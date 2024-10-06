@@ -40,8 +40,8 @@ instagram-topic-classifier/
 ├── config/
 │   ├── azure_environment.yml        # Azure ML environment configuration
 │   ├── classifier-endpoint.yml      # Azure ML endpoint configuration
-│   ├── blue-deployment.yml          # Azure ML deployment configuration for stable blue deployments as part of blue/green deployment strategy
-│   ├── green-deployment.yml         # Azure ML deployment configuration for novel green deployments as part of blue/green deployment strategy
+│   ├── blue-deployment.yml          # Azure ML configuration for stable blue deployments as part of blue/green deployment strategy
+│   ├── green-deployment.yml         # Azure ML configuration for novel green deployments as part of blue/green deployment strategy
 │   ├── environment_api_local.yml    # Conda environment specification for local API development
 │   ├── environment_api_azure.yml    # Conda environment specification for API deployment on Azure
 │   ├── environment_model_local.yml  # Conda environment specification for local model development
