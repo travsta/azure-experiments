@@ -192,20 +192,21 @@ Remember, while high coverage is important, it's equally important to have meani
 
 ## Deployment
 
-## Setting Up Azure Resources
+### Setting Up Azure Resources
 
 Before deploying your application, you need to set up the necessary Azure resources. Follow these steps to create an Azure account and set up the required components for Azure ML and Azure Functions.
 
-### 1. Create an Azure Account
+#### 1. Login to or Create an Azure Account
 
-1. Go to the [Azure website](https://azure.microsoft.com/en-us/free/) and click on "Start free" or "Create a free account".
-2. Follow the registration process, which will require you to provide some personal information and a credit card for identity verification (you won't be charged unless you explicitly upgrade).
+1. Go to the [Azure website](https://azure.microsoft.com/en-us/free/) and click on "Sign In" or "Create a free account".
+2a. If signing in, make sure you have some credit or valid payment info to activate Azure features.  
+2b. If creating a new accout, follow the registration process, which will require you to provide some personal information and a credit card for identity verification (you won't be charged unless you explicitly upgrade).
 
-### 2. Set Up Azure Resources
+#### 2. Set Up Azure Resources
 
-Once you have an Azure account, you need to create the necessary resources:
+Once you have accessed your Azure account, you need to create the necessary resources:
 
-#### Create a Resource Group
+##### Create a Resource Group
 
 1. Sign in to the [Azure Portal](https://portal.azure.com/).
 2. Click on "Resource groups" in the left menu.
@@ -213,7 +214,7 @@ Once you have an Azure account, you need to create the necessary resources:
 4. Choose a name for your resource group and select a region.
 5. Click "Review + create", then "Create".
 
-#### Set Up Azure Machine Learning
+##### Set Up Azure Machine Learning
 
 1. In the Azure Portal, click "Create a resource".
 2. Search for "Machine Learning" and select it.
@@ -226,7 +227,7 @@ Once you have an Azure account, you need to create the necessary resources:
 5. Click "Review + create", then "Create".
 6. Wait for the deployment to complete.
 
-#### Create an Azure ML Endpoint
+##### Create an Azure ML Endpoint
 
 1. Go to your Azure ML workspace.
 2. In the left menu, under "Assets", click on "Endpoints".
@@ -236,7 +237,7 @@ Once you have an Azure account, you need to create the necessary resources:
 6. Configure the compute and deployment settings as needed.
 7. Click "Create" and wait for the endpoint to be created.
 
-#### Set Up Azure Functions
+##### Set Up Azure Functions
 
 1. In the Azure Portal, click "Create a resource".
 2. Search for "Function App" and select it.
@@ -251,7 +252,7 @@ Once you have an Azure account, you need to create the necessary resources:
 5. Click "Review + create", then "Create".
 6. Wait for the deployment to complete.
 
-### Setting Up Deployment Credentials
+#### Setting Up Deployment Credentials
 
 Now that you have created the necessary Azure resources, you need to set up several secrets in your GitHub repository. These secrets allow the GitHub Actions workflows to securely authenticate with Azure and access the necessary resources. Follow these steps to set up the required secrets:
 
