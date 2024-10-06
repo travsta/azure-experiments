@@ -374,15 +374,63 @@ Criteria for full shift to green:
 - No significant increase in resource usage
 
 ## Scaling and Stress Testing
+
 ### Scaling
-- Azure Functions: Auto-scales based on the number of events it needs to process
-- Azure ML: Can be scaled by adjusting the AKS cluster
+
+#### Azure Functions
+- Azure Functions automatically scales based on the number of events it needs to process.
+- You can configure the scaling behavior in the Function App settings.
+
+#### Azure Machine Learning
+- Azure ML managed online endpoints automatically scale the compute based on the traffic.
+- You can configure autoscaling settings in the deployment configuration:
+  - Set `instance_count` to a fixed number for manual scaling.
+  - Use `autoscale` settings for dynamic scaling based on CPU utilization or request count.
+
+Example `deployment.yml` autoscale configuration:
+```yaml
+resources:
+  instance_count: 1
+autoscale:
+  min_instances: 1
+  max_instances: 5
+  scale_target: 70
+  scale_out_cooldown: 300
+  scale_in_cooldown: 300
+```
 
 ### Stress Testing
-1. Use tools like Apache JMeter or Locust for load testing
-2. Create test scenarios mimicking expected traffic patterns
-3. Monitor performance metrics in Azure Monitor
-4. Adjust scaling settings based on test results
+
+1. Tools:
+   - Use tools like Apache JMeter, Locust, or Azure Load Testing for comprehensive load testing.
+
+2. Test Scenarios:
+   - Create test scenarios that mimic expected traffic patterns.
+   - Include both normal and peak load scenarios.
+
+3. Metrics to Monitor:
+   - Response times
+   - Error rates
+   - Resource utilization (CPU, Memory)
+   - Autoscaling behavior
+
+4. Process:
+   - Start with a baseline test to understand current performance.
+   - Gradually increase load to identify bottlenecks.
+   - Test autoscaling by rapidly increasing and decreasing load.
+
+5. Monitoring:
+   - Use Azure Monitor to track performance during tests.
+   - Set up custom dashboards to visualize key metrics.
+
+6. Adjustments:
+   - Based on test results, adjust scaling settings in both Azure Functions and Azure ML deployments.
+   - Optimize code or infrastructure if bottlenecks are identified.
+
+7. Continuous Testing:
+   - Implement regular stress tests as part of your CI/CD pipeline to catch performance regressions.
+
+Remember to clean up resources after stress testing to avoid unnecessary costs, and always test in a non-production environment first.
 
 ## Configuration Management
 This project uses environment variables for configuration. To set up:
