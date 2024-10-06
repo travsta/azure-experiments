@@ -1,6 +1,19 @@
 # Repository Structure
 
-This document provides a comprehensive overview of the file and directory structure of the Instagram Topic Classification project.
+This document provides a comprehensive overview of the Instagram Topic Classification project's file and directory structure.
+
+## Overview
+
+The project is organized into several key directories:
+
+- `src/`: Contains the main source code, separated into `api/` and `model/` subdirectories.
+- `tests/`: Contains all unit tests, mirroring the structure of `src/`.
+- `config/`: Houses configuration files for different environments and Azure services.
+- `.github/workflows/`: Contains CI/CD pipeline definitions.
+- `scripts/`: Includes utility scripts for environment setup and testing.
+- `docs/`: Contains additional project documentation.
+
+The root directory contains configuration files and the main README.
 
 ```
 instagram-topic-classifier/
@@ -73,13 +86,18 @@ Contains all unit tests for the project, mirroring the structure of the `src/` d
 
 ### `config/`
 Contains configuration files for the project.
-- `endpoint.yml`: Defines the Azure ML endpoint configuration.
-- `deployment.yml`: Specifies the deployment settings for the model in Azure ML.
+- `azure_environment.yml`: Defines the Azure ML environment configuration.
+- `classifier-endpoint.yml`: Defines the Azure ML endpoint configuration.
+- `blue-deployment.yml`: Configuration for the "blue" deployment in a blue-green deployment strategy.
+- `green-deployment.yml`: Configuration for the "green" deployment in a blue-green deployment strategy.
 - `environment_api_local.yml`: Defines the Conda environment for local API development.
 - `environment_api_azure.yml`: Defines the Conda environment for API deployment on Azure.
 - `environment_model_local.yml`: Defines the Conda environment for local model development.
 - `environment_model_azure.yml`: Defines the Conda environment for model deployment on Azure.
 - `pytest.ini`: Configuration file for pytest, including coverage settings.
+- `requirements.txt`: A version of environment_api_azure.yml that is compatible with Python venv as required for the Azure Function.
+- `host.json`: A file with necessary configuration items for the Azure Function serving the API.
+These files are crucial for managing the Azure infrastructure and deployments for both the model and API components of the project.
 
 ### `docs/`
 Contains additional documentation for the project.
