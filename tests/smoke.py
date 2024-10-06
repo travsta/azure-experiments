@@ -1,20 +1,32 @@
 import http.client
 import json
+import os
 
 def test_api():
     """
     Test the API by sending a POST request with a JSON payload and checking the response.
+    The API endpoint is read from the API_ENDPOINT environment variable.
     """
+    # Get the API endpoint from environment variable
+    api_endpoint = os.environ.get('API_ENDPOINT')
+    if not api_endpoint:
+        print("Error: API_ENDPOINT environment variable is not set.")
+        return
+
     try:
-        # Establish a connection to the API endpoint
-        conn = http.client.HTTPSConnection("exp-p-eu-topic-classifier-api.azurewebsites.net")
+        # Extract hostname and path from the API endpoint
+        hostname = api_endpoint.split('//')[1].split('/')[0]
+        path = '/' + '/'.join(api_endpoint.split('/')[3:])
         
         # Prepare the JSON payload and headers
         payload = json.dumps({"text": "value"})
         headers = {'Content-Type': 'application/json'}
         
+        # Create HTTPS connection
+        conn = http.client.HTTPSConnection(hostname)
+        
         # Send the POST request
-        conn.request("POST", "/api/classify_post", body=payload, headers=headers)
+        conn.request("POST", path, body=payload, headers=headers)
         response = conn.getresponse()
         
         # Check if the response status is 200 OK
@@ -30,6 +42,8 @@ def test_api():
             f"Expected response {expected_response}, got {json_data}. "
             f"Full response: {data}"
         )
+        
+        print("Smoke test passed successfully!")
     
     except http.client.HTTPException as e:
         print(f"HTTP error occurred: {e}")
