@@ -192,11 +192,145 @@ Remember, while high coverage is important, it's equally important to have meani
 
 ## Deployment
 
+## Setting Up Azure Resources
+
+Before deploying your application, you need to set up the necessary Azure resources. Follow these steps to create an Azure account and set up the required components for Azure ML and Azure Functions.
+
+### 1. Create an Azure Account
+
+1. Go to the [Azure website](https://azure.microsoft.com/en-us/free/) and click on "Start free" or "Create a free account".
+2. Follow the registration process, which will require you to provide some personal information and a credit card for identity verification (you won't be charged unless you explicitly upgrade).
+
+### 2. Set Up Azure Resources
+
+Once you have an Azure account, you need to create the necessary resources:
+
+#### Create a Resource Group
+
+1. Sign in to the [Azure Portal](https://portal.azure.com/).
+2. Click on "Resource groups" in the left menu.
+3. Click "Create" to make a new resource group.
+4. Choose a name for your resource group and select a region.
+5. Click "Review + create", then "Create".
+
+#### Set Up Azure Machine Learning
+
+1. In the Azure Portal, click "Create a resource".
+2. Search for "Machine Learning" and select it.
+3. Click "Create".
+4. Fill in the required information, including:
+   - Workspace name
+   - Subscription
+   - Resource group (select the one you just created)
+   - Location
+5. Click "Review + create", then "Create".
+6. Wait for the deployment to complete.
+
+#### Create an Azure ML Endpoint
+
+1. Go to your Azure ML workspace.
+2. In the left menu, under "Assets", click on "Endpoints".
+3. Click "Create".
+4. Choose "Real-time endpoint" and click "Next".
+5. Give your endpoint a name (e.g., "exp-p-eu-topic-classifier").
+6. Configure the compute and deployment settings as needed.
+7. Click "Create" and wait for the endpoint to be created.
+
+#### Set Up Azure Functions
+
+1. In the Azure Portal, click "Create a resource".
+2. Search for "Function App" and select it.
+3. Click "Create".
+4. Fill in the required information, including:
+   - Function App name
+   - Subscription
+   - Resource group (select the one you created earlier)
+   - Operating System (choose "Linux")
+   - Runtime stack (choose "Python")
+   - Version (choose the appropriate Python version)
+5. Click "Review + create", then "Create".
+6. Wait for the deployment to complete.
+
+### Setting Up Deployment Credentials
+
+Now that you have created the necessary Azure resources, you need to set up several secrets in your GitHub repository. These secrets allow the GitHub Actions workflows to securely authenticate with Azure and access the necessary resources. Follow these steps to set up the required secrets:
+
+1. **Navigate to your GitHub repository**
+   - Go to the main page of your repository on GitHub.
+
+2. **Access the repository settings**
+   - Click on "Settings" in the top menu bar.
+
+3. **Open the Secrets and Variables section**
+   - In the left sidebar, click on "Secrets and variables", then select "Actions".
+
+4. **Add the following secrets:**
+
+   a. `AZURE_CREDENTIALS`
+      - In the Azure Portal, open the Azure Cloud Shell.
+      - Run the following command, replacing the placeholders with your values:
+        ```
+        az ad sp create-for-rbac --name "myapp-sp" --role contributor \
+                                 --scopes /subscriptions/{subscription-id}/resourceGroups/{resource-group} \
+                                 --sdk-auth
+        ```
+      - Copy the entire JSON output.
+      - In GitHub, click "New repository secret".
+      - Name: `AZURE_CREDENTIALS`
+      - Value: Paste the entire JSON output from the Azure CLI command.
+
+   b. `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
+      - In the Azure Portal, go to your Function App you created earlier.
+      - Click on "Overview", then "Get publish profile".
+      - Copy the entire contents of the downloaded file.
+      - In GitHub, click "New repository secret".
+      - Name: `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
+      - Value: Paste the entire contents of the publish profile.
+
+   c. `AZURE_RESOURCE_GROUP`
+      - In GitHub, click "New repository secret".
+      - Name: `AZURE_RESOURCE_GROUP`
+      - Value: The name of the Azure Resource Group you created earlier.
+
+   d. `AZURE_ML_WORKSPACE`
+      - In GitHub, click "New repository secret".
+      - Name: `AZURE_ML_WORKSPACE`
+      - Value: The name of your Azure Machine Learning workspace you created earlier.
+
+   e. `MODEL_ENDPOINT_URL`
+      - In the Azure Portal, go to your ML model endpoint you created earlier.
+      - In the endpoint details, find and copy the REST endpoint URL.
+      - In GitHub, click "New repository secret".
+      - Name: `MODEL_ENDPOINT_URL`
+      - Value: Paste the endpoint URL.
+
+   f. `MODEL_KEY`
+      - In the Azure Portal, in your ML model endpoint details, find the Primary or Secondary key.
+      - In GitHub, click "New repository secret".
+      - Name: `MODEL_KEY`
+      - Value: Paste the endpoint key.
+
+   g. `AZURE_ML_ENDPOINT_NAME`
+      - In GitHub, click "New repository secret".
+      - Name: `AZURE_ML_ENDPOINT_NAME`
+      - Value: The name of your Azure ML endpoint you created earlier (e.g., "exp-p-eu-topic-classifier").
+
+5. **Verify your secrets**
+   - After adding all secrets, you should see them listed (with values hidden) in the "Actions secrets" section.
+
+These secrets will be securely used by the GitHub Actions workflows to authenticate and interact with your Azure resources during the deployment process.
+
+Remember to never share these secrets or commit them directly to your repository. GitHub Actions will automatically redact any accidental prints of these secrets in your workflow logs.
+
+By setting up these secrets, you're ensuring that your CI/CD pipeline can securely access and deploy to your Azure resources without exposing sensitive information.
+
 ### Deploying the Model to Azure ML
-(Add specific instructions for deploying the model to Azure ML)
+
+After correctly configuring your Azure workspace and github secrets, the pipeline from model-ci-cd.yml can be used to deploy the model from the Actions tab.
 
 ### Deploying the API to Azure Functions
-(Add specific instructions for deploying the API to Azure Functions)
+
+After correctly configuring your Azure workspace and github secrets, the pipeline from api-ci-cd.yml can be used to deploy the API from the Actions tab.
 
 ## Configuration Management
 This project uses environment variables for configuration. To set up:
