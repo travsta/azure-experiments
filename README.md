@@ -72,12 +72,12 @@ instagram-topic-classifier/
 │   ├── environment_api_azure.yml    # Conda environment specification for API deployment on Azure
 │   ├── environment_model_local.yml  # Conda environment specification for local model development
 │   ├── environment_model_azure.yml  # Conda environment specification for model deployment on Azure
-│   ├── requirements.txt             # Pytest configuration file
-│   ├── host.json                    # Pytest configuration file
+│   ├── requirements.txt             # Copy of requirements from environment_api_azure.yml as required for Azure Functions .venv creation
+│   ├── host.json                    # Configuration file for Azure Functions app
 │   └── pytest.ini                   # Pytest configuration file
 │
 ├── docs/
-│   ├── modelling-approach.md        # Explanation of approach to development and maintenance of the supporting model
+│   ├── modeling-approach.md         # Explanation of approach to development and maintenance of the supporting model
 │   └── architecture.md              # Detailed architecture description
 │
 ├── scripts/
