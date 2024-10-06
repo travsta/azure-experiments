@@ -471,7 +471,7 @@ Our CI pipeline automatically runs tests and checks coverage for all pull reques
 The pipeline will post a comment on your pull request with the current coverage percentages for both the model and API components.
 
 ## Future Enhancements
-1. Rate Limiting
+1. Rate Limiting and Storage Caps
    - Implement rate limiting in Azure API Management and storage warnings to manage cost
 2. Azure Monitor Integration
    - Set up more comprehensive monitoring using Azure Monitor
@@ -482,6 +482,8 @@ The pipeline will post a comment on your pull request with the current coverage 
    - Set up continuous testing pipelines independently from deployment pipelines to reduce unnecessary test execution
 5. Security Enhancements
    - Implement Azure AD authentication or key based auth depending on other business and integration reqs
+6. Repo Management
+   - Implementing tags and semantic versioning for easier management of updates
 
 ## Issues
 1. Creation of Azure ML endpoints currently requires versioning; updates to endpoint definition will not cleanly propogate without making additional changes to other configurations
