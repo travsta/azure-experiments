@@ -1,6 +1,10 @@
 # Instagram Topic Classification: Category Discovery and Classification Approach
 
-## Overview
+The problem requires us to develop a system that can label Instagram posts by topic. The key requirement is:
+
+Categorize all posts from a collection of 20-100 topics with confidence scores
+
+## Overview of Approach
 
 This document outlines an approach to discover and classify topics in Instagram posts with an evolving set of 20-100 categories. The method combines embedding techniques, clustering, and human-in-the-loop refinement to create a robust classification system.
 
