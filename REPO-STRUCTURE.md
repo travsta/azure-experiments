@@ -34,18 +34,24 @@ instagram-topic-classifier/
 ├── tests/
 │   ├── test_dummy_model.py          # Unit tests for dummy_model.py
 │   ├── test_score.py                # Unit tests for score.py
-│   └── test_function_app.py         # Unit tests for function_app.py
+│   ├── test_function_app.py         # Unit tests for function_app.py
+│   └── smoke.py                     # End to end test for app after deployed to Azure
 │
 ├── config/
-│   ├── endpoint.yml                 # Azure ML endpoint configuration
-│   ├── deployment.yml               # Azure ML deployment configuration
+│   ├── azure_environment.yml        # Azure ML environment configuration
+│   ├── classifier-endpoint.yml      # Azure ML endpoint configuration
+│   ├── blue-deployment.yml          # Azure ML deployment configuration for stable blue deployments as part of blue/green deployment strategy
+│   ├── green-deployment.yml         # Azure ML deployment configuration for novel green deployments as part of blue/green deployment strategy
 │   ├── environment_api_local.yml    # Conda environment specification for local API development
 │   ├── environment_api_azure.yml    # Conda environment specification for API deployment on Azure
 │   ├── environment_model_local.yml  # Conda environment specification for local model development
 │   ├── environment_model_azure.yml  # Conda environment specification for model deployment on Azure
+│   ├── requirements.txt             # Pytest configuration file
+│   ├── host.json                    # Pytest configuration file
 │   └── pytest.ini                   # Pytest configuration file
 │
 ├── docs/
+│   ├── modelling-approach.md        # Explanation of approach to development and maintenance of the supporting model
 │   └── architecture.md              # Detailed architecture description
 │
 ├── scripts/
@@ -53,7 +59,9 @@ instagram-topic-classifier/
 │   ├── create_model_env.sh          # Script to create model development environment
 │   └── run_tests_with_coverage.sh   # Script to run tests with coverage
 │
-├── .gitignore                       # Specifies intentionally untracked files to ignore
+├── .gitignore                       # Specifies intentionally untracked files for git to ignore
+├── .funcignore                      # Specifies intentionally untracked files for azure functions deployment actions to ignore
+├── .env.example                     # Sample .env file for configuring the API in local runs/tests
 ├── LICENSE                          # License file
 ├── README.md                        # Project overview and setup instructions
 └── REPO_STRUCTURE.md                # This file
