@@ -464,6 +464,11 @@ The pipeline will post a comment on your pull request with the current coverage 
 5. Security Enhancements
    - Implement Azure AD authentication or key based auth depending on other business and integration reqs
 
+## Issues
+1. Creation of Azure ML endpoints currently requires versioning; updates to endpoint definition will not cleanly propogate without making additional changes to other configurations
+2. No current approach for blue deployments. Must currently be done within Azure portal; future feature will include split pipelines for testing and automated green deployments along with manual blue
+3. Local testing instructions are not robust; inconsistent success between linux machines and using WSL
+
 ## Contributing
 1. Fork the repository
 2. Create a new branch (`git checkout -b feature/AmazingFeature`)
