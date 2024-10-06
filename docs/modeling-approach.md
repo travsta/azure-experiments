@@ -141,9 +141,8 @@ For a new post to be classified:
      - Use lower accuracy for posts that are clearly within a category's core
   f. Regularly re-evaluate the accuracy-speed trade-off as the dataset grows and evolves
 
-### 7.2 Hardware Considerations
-- Ensure the system runs on hardware capable of handling the expected load
-- Consider using cloud-based solutions for scalability
+### 7.2 Infrastructure Considerations
+- Using cluster or cloud-based solutions for scalability and streaming data for storage efficient processing
 
 ## Conclusion
 
