@@ -125,7 +125,7 @@ jobs:
     needs: deploy
     runs-on: ubuntu-latest
     env: 
-      API_ENDPOINT: https://${{ env.AZURE_FUNCTIONAPP_NAME }}.azurewebsites.net/api/classify_post
+      API_ENDPOINT: https://${{ secrets.AZURE_FUNCTIONAPP_NAME }}.azurewebsites.net/api/classify_post
     steps:
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@v4
