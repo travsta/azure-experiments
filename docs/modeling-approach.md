@@ -1,8 +1,61 @@
-# Instagram Topic Classification: Category Discovery and Classification Approach
+# Social Media Post Topic Classification: Category Discovery and Classification Approach
 
 The problem requires us to develop a system that can label Instagram posts by topic. The key requirement is:
 
 Categorize all posts from a collection of 20-100 topics with confidence scores
+
+## Assumptions
+Our approach to Instagram topic classification is based on the following key assumption:
+
+### Hard vs Soft Clustering
+There is a trade-off between category breadth/overlap and post coverage, which can be adjusted based on user requirements:
+
+1. **High Coverage Approach**: 
+   - Prioritize broad, potentially overlapping categories.
+   - This maximizes the number of posts classified with relatively high confidence.
+   - May result in posts being assigned to multiple categories.
+
+2. **High Distinctness Approach**:
+   - Prioritize more distinct, non-overlapping categories.
+   - This increases the likelihood of posts being mapped to a single, specific category.
+   - May result in fewer posts being classified with high confidence, and more posts either unclassified or classified with lower confidence.
+
+The choice between these approaches depends on the specific needs of the end-users and the intended application of the classification system. Given the low number of categories permitted and because it makes for the more interesting approach, we will assume the use case suggests a preference for distinct categories of interest and can tolerate posts being mapped with low confidence. The below approach could be modified to instead use soft clustering techniques to manage categories/clusters through an initial sampling of the post corpus and then periodic recalibrations using new data.
+
+### Additional Assumptions in Classification Approach
+
+**Data Availability and Access**
+   - We have access to a large volume of posts (500+ billion) and can process them without significant legal or technical barriers.
+
+**Text Sufficiency**
+   - The textual content of Instagram posts (captions, comments, hashtags) provides sufficient information for meaningful topic classification, even without analyzing images or videos.
+
+**Scalability of Cloud Infrastructure**
+   - Azure cloud services (or similar platforms) can scale to handle the processing and storage requirements of billions of posts and real-time classification requests and users will accept the costs.
+
+**Dynamic Nature of Topics**
+   - Post topics are not static and new trends can emerge rapidly, necessitating a system that can adapt and evolve its categories over time even though our approach should result in relatively slow changing categories.
+
+**Multi-label Relevance**
+   - Many Instagram posts are relevant to multiple topics, making a multi-label classification approach more appropriate than strict single-label classification.
+
+**User Feedback Value**
+   - End-users of the system (or a subset of expert users) can provide valuable feedback for improving classification accuracy and identifying new topics.
+
+**Ethical Compliance**
+   - The classification system can be implemented and operated in compliance with relevant data protection regulations and ethical guidelines.
+
+**Computational Efficiency**
+   - Approximate Nearest Neighbor (ANN) search and other optimization techniques can provide sufficient speed for real-time classification without significant loss of accuracy.
+
+**Category Stability**
+   - While allowing for dynamic updates, the core set of categories will remain relatively stable over time, not requiring complete retraining of the system too frequently.
+
+**Multilingual Capability**
+   - The posts are all in english.
+
+**Acceptable Confidence Levels**
+   - There exists a range of confidence levels that balances the trade-off between classification coverage and accuracy, which will be acceptable for the intended use cases.
 
 ## Overview of Approach
 
@@ -73,7 +126,7 @@ Periodically:
    - Additionally, use a t-test or ANOVA to compare the distribution of posts in both categories
    - If p-value < 0.05 (or another chosen threshold), consider the overlap significant
    - Consider the number of posts that could be classified into either category with high confidence
-   - If overlap is statistically significant, merge the categories
+   - If overlap is statistically significant, consider a merge of the categories
 3. Ensure the total number of categories stays within the desired range (20-100)
 
 ## 4. Classification System
