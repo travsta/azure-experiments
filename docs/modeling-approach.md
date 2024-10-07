@@ -16,7 +16,7 @@ There is a trade-off between category breadth/overlap and post coverage, which c
    - May result in posts being assigned to multiple categories.
 
 2. **High Distinctness Approach**:
-   - Prioritize more distinct, non-overlapping categories.
+   - Prioritize more distinct, minimally-overlapping categories.
    - This increases the likelihood of posts being mapped to a single, specific category.
    - May result in fewer posts being classified with high confidence, and more posts either unclassified or classified with lower confidence.
 
