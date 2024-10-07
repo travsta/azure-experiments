@@ -64,7 +64,7 @@ This document outlines an approach to discover and classify topics in Instagram 
 ## 1. Text Embedding
 
 ### 1.1 Embedding Selection
-- Use a state-of-the-art language model for embedding, such as BAAI/bge or other recent advancements.
+- Use a state-of-the-art language model for embedding, such as [BAAI/bge](https://huggingface.co/collections/BAAI/bge-66797a74476eb1f085c7446d) or other recent advancements.
 - Avoid older models like BERT in favor of more recent, powerful alternatives.
 
 ### 1.2 Embedding Process
@@ -76,7 +76,7 @@ This document outlines an approach to discover and classify topics in Instagram 
 ### 2.1 Embedding Database
 - Create a database to store post embeddings.
 - Use a system that allows for efficient similarity search, such as Approximate Nearest Neighbor (ANN) indexing.
-- Recommended tool: Qdrant (https://github.com/qdrant/qdrant)
+- Recommended tool: [Qdrant](https://github.com/qdrant/qdrant)
 
 ### 2.2 Category Database
 - Maintain a separate database for categories.
