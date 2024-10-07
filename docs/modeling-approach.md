@@ -10,7 +10,7 @@ Our approach to Instagram topic classification is based on the following key ass
 ### Hard vs Soft Clustering
 There is a trade-off between category breadth/overlap and post coverage, which can be adjusted based on user requirements:
 
-1. **High Coverage Approach**: 
+1. **Broad Coverage Approach**: 
    - Prioritize broad, potentially overlapping categories.
    - This maximizes the number of posts classified with relatively high confidence.
    - May result in posts being assigned to multiple categories.
