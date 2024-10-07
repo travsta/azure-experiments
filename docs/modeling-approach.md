@@ -138,8 +138,8 @@ Periodically:
 For a new post to be classified:
 1. Embed the post text
 2. Use the ANN index to find the most similar existing embeddings
-3. Assign the post to the most frequent category among these similar embeddings
-4. Calculate a confidence score based on the similarity and category consistency of the nearest neighbors
+3. Assign the post to the most frequent categories among these similar embeddings
+4. Calculate a confidence score based on the similarity and category consistency of the nearest neighbors, i.e. softmax
 
 ## 5. Scalability Considerations
 
